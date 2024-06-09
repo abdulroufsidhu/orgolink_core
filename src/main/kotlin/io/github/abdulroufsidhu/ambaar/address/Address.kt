@@ -14,16 +14,16 @@ import java.time.Instant
 @Entity
 @Table(name = "addresses")
 data class Address(
-    var street: String,
-    var city: String,
-    var state: String,
-    var zip: String,
+    var street: String?,
+    var city: String?,
+    var state: String?,
+    var zip: String?,
     @Enumerated(EnumType.STRING)
-    var country: Country,
+    var country: Country?,
     @OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
-    var branches: List<Branch>,
+    var branches: List<Branch>?,
     @OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
-    var users: List<User>,
+    var users: List<User>?,
     override var id: String? = null,
     override var createdAt: Instant?,
     override var updatedAt: Instant?,

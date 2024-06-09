@@ -4,11 +4,15 @@ import io.github.abdulroufsidhu.ambaar.branch.Branch
 import io.github.abdulroufsidhu.ambaar.core.BaseTable
 import io.github.abdulroufsidhu.ambaar.product.Product
 import jakarta.persistence.Column
+import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
 import java.time.Instant
 
+@Entity
+@Table(name = "inventory")
 data class Inventory(
 
     var color: String?,
