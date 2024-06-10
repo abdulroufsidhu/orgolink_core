@@ -23,30 +23,30 @@ import java.time.Instant
     ]
 )
 data class Branch(
-    var name: String,
-    var code: String,
+    var name: String? = null,
+    var code: String? = null,
     @Column(unique = true)
-    var phone: String,
+    var phone: String? = null,
     @Column(unique = true)
-    var email: String,
-    var website: String,
-    var description: String,
+    var email: String? = null,
+    var website: String? = null,
+    var description: String? = null,
 
     @ManyToOne(targetEntity = Address::class, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
-    var address: Address,
+    var address: Address? = null,
 
     @ManyToOne(targetEntity = Business::class)
     @JoinColumn(name = "business_id")
-    var business: Business,
+    var business: Business? = null,
 
     @OneToMany(mappedBy = "branch")
-    var inventory: List<Inventory>,
+    var inventory: List<Inventory>? = null,
 
     @OneToMany(mappedBy = "branch")
-    var employees: List<Employee>,
+    var employees: List<Employee>? = null,
 
     override var id: String? = null,
-    override var createdAt: Instant?,
-    override var updatedAt: Instant?,
+    override var createdAt: Instant? = null,
+    override var updatedAt: Instant? = null,
 ) : BaseTable(id, createdAt, updatedAt)

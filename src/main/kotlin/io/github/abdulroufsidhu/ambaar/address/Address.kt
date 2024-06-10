@@ -9,24 +9,33 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+import jakarta.persistence.UniqueConstraint
 import java.time.Instant
 
 @Entity
-@Table(name = "addresses")
+@Table(
+    name = "addresses",
+    uniqueConstraints = [
+        UniqueConstraint(
+            name = "address_unique_constraint",
+            columnNames = ["street", "city", "state", "zip", "country"]
+        )
+    ]
+)
 data class Address(
-    var street: String?,
-    var city: String?,
-    var state: String?,
-    var zip: String?,
+    var street: String? = null,
+    var city: String? = null,
+    var state: String? = null,
+    var zip: String? = null,
     @Enumerated(EnumType.STRING)
-    var country: Country?,
+    var country: Country? = null,
     @OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
-    var branches: List<Branch>?,
+    var branches: List<Branch>? = null,
     @OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
-    var users: List<User>?,
+    var users: List<User>? = null,
     override var id: String? = null,
-    override var createdAt: Instant?,
-    override var updatedAt: Instant?,
+    override var createdAt: Instant? = null,
+    override var updatedAt: Instant? = null,
 ) : BaseTable(id, createdAt, updatedAt) {
     enum class Country(val code: String, val countryName: String) {
         AFGHANISTAN("AF", "Afghanistan"),

@@ -1,9 +1,9 @@
 package io.github.abdulroufsidhu.ambaar
 
 import io.github.abdulroufsidhu.ambaar.address.Address
-import io.github.abdulroufsidhu.ambaar.address.AddressQueries
+import io.github.abdulroufsidhu.ambaar.address.AddressDao
 import io.github.abdulroufsidhu.ambaar.user.User
-import io.github.abdulroufsidhu.ambaar.user.UserQueries
+import io.github.abdulroufsidhu.ambaar.user.UserDao
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,8 +14,8 @@ import java.time.Instant
 @SpringBootTest
 @AutoConfigureMockMvc
 class AmbaarApplicationTests(
-    @Autowired private val userQueries: UserQueries,
-    @Autowired private val addresQueries: AddressQueries,
+    @Autowired private val userDao: UserDao,
+    @Autowired private val addresDao: AddressDao,
 ) {
     @Test
     fun contextLoads() {
@@ -41,8 +41,8 @@ class AmbaarApplicationTests(
             Instant.now(),
         )
 
-        val addresRepo = addresQueries.save(user.address)
-        val userRepo = userQueries.save(user.copy(address = addresRepo))
+        val addresRepo = addresDao.save(user.address)
+        val userRepo = userDao.save(user.copy(address = addresRepo))
 
         Assertions.assertEquals("abdulroufsidhu", userRepo.username)
 
