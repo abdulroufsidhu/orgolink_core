@@ -1,6 +1,7 @@
 package io.github.abdulroufsidhu.ambaar.user
 
 import io.github.abdulroufsidhu.ambaar.address.AddressLogic
+import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.stereotype.Service
 
@@ -15,6 +16,7 @@ class UserLogic(
         OptimisticLockingFailureException::class,
         NoSuchElementException::class,
     )
+    @Transactional
     fun createUser(user: User): User {
         val address = addressLogic.saveOrUpdate(user.address)
         user.address = address
@@ -33,6 +35,7 @@ class UserLogic(
         IllegalArgumentException::class,
         OptimisticLockingFailureException::class,
     )
+    @Transactional
     fun updateUser(user: User): User {
         if (!user.id.isNullOrBlank())
             throw IllegalArgumentException("User id cannot be null or blank")
@@ -43,6 +46,7 @@ class UserLogic(
         IllegalArgumentException::class,
         OptimisticLockingFailureException::class,
     )
+    @Transactional
     fun updatePassword(userId: String, password: String): User {
         val user = userDao.getReferenceById(userId)
         user.password = password

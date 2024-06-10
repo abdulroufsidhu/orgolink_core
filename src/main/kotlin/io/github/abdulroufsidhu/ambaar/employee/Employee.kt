@@ -36,9 +36,11 @@ data class Employee(
     @Enumerated(EnumType.STRING)
     var permissions: List<Permissions>,
 
+    var active: Boolean = true,
+
     override var id: String? = null,
-    override var createdAt: Instant?,
-    override var updatedAt: Instant?,
+    override var createdAt: Instant?=null,
+    override var updatedAt: Instant?=null,
 ) : BaseTable(id, createdAt, updatedAt) {
     enum class Permissions {
         CREATE_BUSINESS,

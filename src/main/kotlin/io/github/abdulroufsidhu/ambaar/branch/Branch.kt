@@ -19,7 +19,7 @@ import java.time.Instant
 @Table(
     name = "branches",
     uniqueConstraints = [
-        UniqueConstraint(name = "unique_code", columnNames = ["code", "business_id"])
+        UniqueConstraint(name = "unique_branch", columnNames = ["code", "business_id"])
     ]
 )
 data class Branch(
@@ -31,6 +31,8 @@ data class Branch(
     var email: String? = null,
     var website: String? = null,
     var description: String? = null,
+
+    var active: Boolean = true,
 
     @ManyToOne(targetEntity = Address::class, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")

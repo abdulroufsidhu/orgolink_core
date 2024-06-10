@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.MappedSuperclass
+import jakarta.persistence.PrePersist
+import org.hibernate.annotations.ColumnDefault
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import java.time.Instant
@@ -24,4 +26,10 @@ abstract class BaseTable(
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     open var updatedAt: Instant?,
-)
+) {
+    @PrePersist
+    fun preInsert() {
+        if (this.updatedAt==null) updatedAt = Instant.now()
+        if (this.createdAt==null) createdAt = Instant.now()
+    }
+}

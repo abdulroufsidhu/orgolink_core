@@ -17,7 +17,7 @@ import java.time.Instant
     name = "addresses",
     uniqueConstraints = [
         UniqueConstraint(
-            name = "address_unique_constraint",
+            name = "unique_address",
             columnNames = ["street", "city", "state", "zip", "country"]
         )
     ]
@@ -246,20 +246,4 @@ data class Address(
             }
         }
     }
-
-    /*
-        @Converter
-        class CountryConverter : AttributeConverter<Country, String> {
-            @Throws(NullPointerException::class)
-            override fun convertToDatabaseColumn(attribute: Country?): String =
-                attribute?.countryName ?: throw NullPointerException("Country cannot be null")
-
-            @Throws(NullPointerException::class, IllegalArgumentException::class)
-            override fun convertToEntityAttribute(dbData: String?): Country =
-                Country.fromCountryName(dbData ?: throw NullPointerException("Country cannot be null"))
-                    ?: throw IllegalArgumentException("Invalid country code")
-        }
-    */
-
 }
-

@@ -34,6 +34,6 @@ data class Inventory(
     var product: Product?,
 
     override var id: String?,
-    override var createdAt: Instant?,
-    override var updatedAt: Instant?,
+    override var createdAt: Instant?=null,
+    override var updatedAt: Instant?=null,
 ) : BaseTable(id, createdAt, updatedAt)
