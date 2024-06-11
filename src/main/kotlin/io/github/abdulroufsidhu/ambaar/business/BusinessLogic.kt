@@ -17,11 +17,7 @@ class BusinessLogic(
         NoSuchElementException::class
     )
     @Transactional
-    fun create(business: Business) {
-        business.branches?.first()?.let { branchLogic.create(it) }
-            ?: throw IllegalArgumentException("branch info not provided")
-        businessDao.save(business)
-    }
+    fun create(business: Business) = businessDao.save(business)
 
     @Throws(
         IllegalArgumentException::class,

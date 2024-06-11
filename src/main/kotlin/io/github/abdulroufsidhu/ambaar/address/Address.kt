@@ -29,10 +29,6 @@ data class Address(
     var zip: String? = null,
     @Enumerated(EnumType.STRING)
     var country: Country? = null,
-    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
-    var branches: List<Branch>? = null,
-    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
-    var users: List<User>? = null,
     override var id: String? = null,
     override var createdAt: Instant? = null,
     override var updatedAt: Instant? = null,

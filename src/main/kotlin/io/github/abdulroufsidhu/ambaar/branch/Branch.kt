@@ -42,12 +42,6 @@ data class Branch(
     @JoinColumn(name = "business_id")
     var business: Business? = null,
 
-    @OneToMany(mappedBy = "branch")
-    var inventory: List<Inventory>? = null,
-
-    @OneToMany(mappedBy = "branch")
-    var employees: List<Employee>? = null,
-
     override var id: String? = null,
     override var createdAt: Instant? = null,
     override var updatedAt: Instant? = null,

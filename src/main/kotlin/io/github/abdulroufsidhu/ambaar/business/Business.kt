@@ -24,8 +24,8 @@ data class Business(
     @field:NotBlank
     var licence: String? = null,
 
-    @OneToMany(mappedBy = "business", cascade = [CascadeType.ALL])
-    var branches: List<Branch>? = null,
+    var active: Boolean = true,
+
     override var id: String? = null,
     override var createdAt: Instant? = null,
     override var updatedAt: Instant? = null,

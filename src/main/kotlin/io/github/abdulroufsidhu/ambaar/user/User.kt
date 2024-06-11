@@ -3,7 +3,9 @@ package io.github.abdulroufsidhu.ambaar.user
 import io.github.abdulroufsidhu.ambaar.address.Address
 import io.github.abdulroufsidhu.ambaar.core.BaseTable
 import io.github.abdulroufsidhu.ambaar.employee.Employee
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.annotation.Nonnull
+import jakarta.annotation.Nullable
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -24,11 +26,11 @@ data class User(
     @Column(nullable = false)
     @field:Email(message = "Please enter a valid email address", regexp = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
     var email: String,
-    @OneToMany(mappedBy = "user")
-    var employeements: List<Employee>? = null,
     @ManyToOne(targetEntity = Address::class, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     var address: Address,
+
+    var active: Boolean = true,
 
     override var id: String? = null,
     override var createdAt: Instant?=null,
