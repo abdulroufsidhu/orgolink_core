@@ -1,5 +1,6 @@
 package io.github.abdulroufsidhu.ambaar.user
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.github.abdulroufsidhu.ambaar.address.Address
 import io.github.abdulroufsidhu.ambaar.core.BaseTable
 import io.github.abdulroufsidhu.ambaar.employee.Employee
@@ -22,6 +23,7 @@ data class User(
     @Column(nullable = false, unique = true)
     var username: String,
     @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     var password: String,
     @Column(nullable = false)
     @field:Email(message = "Please enter a valid email address", regexp = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")

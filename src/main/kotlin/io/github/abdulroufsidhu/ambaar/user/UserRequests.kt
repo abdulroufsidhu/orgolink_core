@@ -34,7 +34,7 @@ class UserRequests(
     @PatchMapping("/update-password/{id}")
     fun updatePassword(
         @PathVariable("id") userId: String,
-        @Valid @RequestPart password: String
+        @Valid @RequestBody password: String
     ): Responser<Responser.ResponseObj<User>> =
         Responser.success {
             userLogic.updatePassword(userId, password)
