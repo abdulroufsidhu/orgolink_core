@@ -11,8 +11,7 @@ class EmployeeLogic(
 
     @Transactional
     @Throws(
-        IllegalArgumentException::class,
-        OptimisticLockingFailureException::class
+        IllegalArgumentException::class, OptimisticLockingFailureException::class
     )
     fun create(employee: Employee): Employee {
         return employeeDao.save(employee)
@@ -20,8 +19,7 @@ class EmployeeLogic(
 
     @Transactional
     @Throws(
-        IllegalArgumentException::class,
-        OptimisticLockingFailureException::class
+        IllegalArgumentException::class, OptimisticLockingFailureException::class
     )
     fun update(employee: Employee): Employee {
         if (employee.id == null) throw IllegalArgumentException("id must not be null")
@@ -30,8 +28,7 @@ class EmployeeLogic(
 
     @Transactional
     @Throws(
-        IllegalArgumentException::class,
-        OptimisticLockingFailureException::class
+        IllegalArgumentException::class, OptimisticLockingFailureException::class
     )
     fun delete(id: String): Employee {
         val emp = employeeDao.getReferenceById(id)
@@ -44,8 +41,11 @@ class EmployeeLogic(
         OptimisticLockingFailureException::class,
         NoSuchElementException::class,
     )
-    fun read(branchId: String): List<Employee> {
-        return employeeDao.findByBranchId(branchId).orElseThrow()
+    fun read(branchId: String?, userId: String?): List<Employee> {
+        return if (!branchId.isNullOrBlank()) employeeDao.findByBranchId(branchId).orElseThrow()
+        else employeeDao.findByUserId(
+            userId ?: throw IllegalArgumentException("userId must not be null")
+        ).orElseThrow()
     }
 
 }

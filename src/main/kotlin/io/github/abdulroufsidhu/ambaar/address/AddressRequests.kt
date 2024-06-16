@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class AddressRequests(private val addressLogic: AddressLogic) {
 
     @GetMapping("")
-    fun getAddress (
+    fun getAddress(
         @RequestParam("id") id: String?,
         @RequestParam("state") state: String?,
         @RequestParam("city") city: String?,

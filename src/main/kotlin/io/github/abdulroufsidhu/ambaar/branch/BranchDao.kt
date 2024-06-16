@@ -9,4 +9,6 @@ interface BranchDao: JpaRepository<Branch, String> {
 
     fun findByPhone(phone: String): Optional<Branch>
 
+    fun findByBusinessId(businessId: String): Optional<List<Branch>>
+
 }

@@ -29,4 +29,9 @@ class BusinessLogic(
         if (business.id.isNullOrBlank()) throw IllegalArgumentException("id not provided")
         return businessDao.save(business)
     }
+
+    fun delete(id: String): Business {
+        val business = businessDao.getReferenceById(id)
+        return businessDao.save(business.copy(active = false))
+    }
 }

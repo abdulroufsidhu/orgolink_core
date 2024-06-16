@@ -1,6 +1,5 @@
 package io.github.abdulroufsidhu.ambaar.branch
 
-import io.github.abdulroufsidhu.ambaar.address.AddressDao
 import io.github.abdulroufsidhu.ambaar.address.AddressLogic
 import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
@@ -41,11 +40,28 @@ class BranchLogic(
         IllegalArgumentException::class, NoSuchElementException::class,
         OptimisticLockingFailureException::class
     )
+    fun get(businessId: String): List<Branch>? {
+        return branchDao.findByBusinessId(businessId).orElseThrow()
+    }
+
+    @Throws(
+        IllegalArgumentException::class, NoSuchElementException::class,
+        OptimisticLockingFailureException::class
+    )
     @Transactional
     fun update(branch: Branch): Branch {
         if (branch.address == null) throw IllegalArgumentException("Address cannot be null")
         val addr = addressLogic.saveOrUpdate(branch.address!!)
         branch.address = addr
         return branchDao.save(branch)
+    }
+
+    @Throws(
+        IllegalArgumentException::class, NoSuchElementException::class,
+        OptimisticLockingFailureException::class
+    )
+    fun delete(id: String) {
+        val branch = branchDao.getReferenceById(id)
+        branchDao.save(branch.copy(active = false))
     }
 }

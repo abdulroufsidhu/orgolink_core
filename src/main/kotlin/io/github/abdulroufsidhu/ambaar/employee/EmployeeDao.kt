@@ -6,7 +6,7 @@ import java.util.Optional
 interface EmployeeDao: JpaRepository<Employee, String> {
     fun findByBranchId(branchId: String): Optional<List<Employee>>
 
-    fun findByUserId(userId: String): Optional<Employee>
+    fun findByUserId(userId: String): Optional<List<Employee>>
 
     fun findByActive(active: Boolean): Optional<List<Employee>>
 
