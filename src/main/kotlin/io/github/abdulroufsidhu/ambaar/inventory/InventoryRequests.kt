@@ -1,4 +1,4 @@
-package io.github.abdulroufsidhu.ambaar.employee
+package io.github.abdulroufsidhu.ambaar.inventory
 
 import io.github.abdulroufsidhu.ambaar.core.Responser
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -12,39 +12,35 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/employee")
-class EmployeeRequests(
-    private val employeeLogic: EmployeeLogic
+@RequestMapping("/inventory")
+class InventoryRequests(
+    private val inventoryLogics: InventoryLogics
 ) {
-
-    @GetMapping("")
-    fun getEmployees(
-        @RequestParam("branch_id") branchId: String,
-        @RequestParam("user_id") userId: String
+    @GetMapping("/{page}")
+    fun getInventory(
+        @PathVariable("page") page: Int,
+        @RequestParam("inventory") inventory: Inventory
     ) = Responser.success {
-        employeeLogic.read(branchId, userId)
+        inventoryLogics.find(inventory, page)
     }
 
     @PutMapping("")
-    fun createEmployee(
-        @RequestBody employee: Employee
-    ) = Responser.success {
-        employeeLogic.create(employee)
+    fun putInventory(
+        @RequestBody inventory: Inventory
+    ) = Responser.success{
+        inventoryLogics.save(inventory)
     }
 
     @PatchMapping("")
-    fun updateEmployee(
-        @RequestBody employee: Employee
+    fun updateInventory(
+        @RequestBody inventory: Inventory
     ) = Responser.success {
-        employeeLogic.update(employee)
+        inventoryLogics.update(inventory)
     }
 
     @DeleteMapping("/{id}")
-    fun deleteEmployee(
-        @PathVariable("id") employeeId: String
-    ) = Responser.success {
-        employeeLogic.delete(employeeId)
-    }
-
+    fun deleteInventory(
+        @PathVariable("id") id: String
+    ) = Responser.success { inventoryLogics.delete(id) }
 
 }

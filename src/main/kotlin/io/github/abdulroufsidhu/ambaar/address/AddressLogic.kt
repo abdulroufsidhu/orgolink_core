@@ -2,6 +2,7 @@ package io.github.abdulroufsidhu.ambaar.address
 
 import org.springframework.stereotype.Service
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class AddressLogic(
@@ -10,25 +11,21 @@ class AddressLogic(
 
 
     @Throws(IllegalArgumentException::class, NoSuchElementException::class)
-    fun saveOrUpdate(address: Address) = try {
-        addressDao.save(address)
-    } catch (e: Exception) {
-        if (address.state == null) throw IllegalArgumentException("State is required")
-        if (address.city == null) throw IllegalArgumentException("City is required")
-        if (address.street == null) throw IllegalArgumentException("Street is required")
-        if (address.zip == null) throw IllegalArgumentException("Zip is required")
-        addressDao.findByStateAndCityAndStreetAndZip(
-            address.state!!,
-            address.city!!,
-            address.street!!,
-            address.zip!!,
-        ).orElseThrow()
+    fun saveOrFind(address: Address): Address {
+        println("address to find is: $address")
+        val found = findExcludingId(address).getOrNull()
+        println("found address is: $found")
+        return found ?: addressDao.save(address)
     }
 
     @Throws(IllegalArgumentException::class, NoSuchElementException::class)
-    fun find(address: Address): Optional<Address> {
+    fun findIncludingId(address: Address): Optional<Address> {
         if (address.id.isNullOrBlank().not()) return addressDao.findById(address.id!!)
+        return findExcludingId(address)
+    }
 
+    @Throws(IllegalArgumentException::class, NoSuchElementException::class)
+    fun findExcludingId(address: Address): Optional<Address> {
         if (address.state == null) throw IllegalArgumentException("State is required")
         if (address.city == null) throw IllegalArgumentException("City is required")
         if (address.street == null) throw IllegalArgumentException("Street is required")

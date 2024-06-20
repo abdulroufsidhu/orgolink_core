@@ -27,7 +27,8 @@ data class Inventory(
     var purchasePrice: Double?,
 
     @ManyToOne(targetEntity = Branch::class, fetch = FetchType.EAGER)
-    var branch: List<Branch>?,
+    @JoinColumn(name = "branch_id")
+    var branch: Branch,
 
     @ManyToOne(targetEntity = Product::class, fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")

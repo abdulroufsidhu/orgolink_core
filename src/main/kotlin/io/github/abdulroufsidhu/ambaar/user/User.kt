@@ -21,18 +21,18 @@ import java.time.Instant
 @Table(name = "users")
 data class User(
     @Column(nullable = false, unique = true)
-    var username: String,
+    var username: String?,
     @Column(nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    var password: String,
+    var password: String?,
     @Column(nullable = false)
     @field:Email(message = "Please enter a valid email address", regexp = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
-    var email: String,
+    var email: String?,
     @ManyToOne(targetEntity = Address::class, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
-    var address: Address,
+    var address: Address?,
 
-    var active: Boolean = true,
+    var active: Boolean? = true,
 
     override var id: String? = null,
     override var createdAt: Instant?=null,

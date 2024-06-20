@@ -1,5 +1,6 @@
 package io.github.abdulroufsidhu.ambaar.business
 
+import io.github.abdulroufsidhu.ambaar.core.Responser
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -14,11 +15,18 @@ class BusinessRequests(
 ) {
 
     @PutMapping("")
-    fun createBusiness(business: Business) = businessLogic.create(business)
+    fun createBusiness(business: Business) = Responser.success {
+        businessLogic.create(business)
+    }
 
     @PatchMapping("")
-    fun updateBusiness(business: Business) = businessLogic.update(business)
+    fun updateBusiness(business: Business) = Responser.success {
+        businessLogic.update(business)
+    }
 
     @DeleteMapping("/{id}")
-    fun deleteBusiness(@PathVariable("id") id: String) = businessLogic.delete(id)
+    fun deleteBusiness(@PathVariable("id") id: String) =
+        Responser.success {
+            businessLogic.delete(id)
+        }
 }

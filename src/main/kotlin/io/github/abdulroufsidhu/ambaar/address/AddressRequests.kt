@@ -1,5 +1,6 @@
 package io.github.abdulroufsidhu.ambaar.address
 
+import io.github.abdulroufsidhu.ambaar.core.Responser
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -11,11 +12,9 @@ class AddressRequests(private val addressLogic: AddressLogic) {
 
     @GetMapping("")
     fun getAddress(
-        @RequestParam("id") id: String?,
-        @RequestParam("state") state: String?,
-        @RequestParam("city") city: String?,
-        @RequestParam("zip") zip: String?,
-        @RequestParam("country") country: Address.Country?,
-    ) = addressLogic.find(Address(state = state, city = city, zip = zip, country = country))
+        address: Address,
+    ) = Responser.success {
+        addressLogic.findIncludingId(address)
+    }
 
 }

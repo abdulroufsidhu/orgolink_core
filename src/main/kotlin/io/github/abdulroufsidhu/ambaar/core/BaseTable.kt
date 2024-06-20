@@ -22,7 +22,7 @@ abstract class BaseTable(
     @Column(name = "created_at", nullable = false, updatable = false)
     @JsonProperty("created_at", access = JsonProperty.Access.READ_ONLY)
     open var createdAt: Instant?,
-    @JsonProperty("updated_at")
+    @JsonProperty("updated_at", access = JsonProperty.Access.READ_ONLY)
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     open var updatedAt: Instant?,

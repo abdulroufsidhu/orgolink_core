@@ -18,7 +18,8 @@ class UserLogic(
     )
     @Transactional
     fun createUser(user: User): User {
-        val address = addressLogic.saveOrUpdate(user.address)
+        if (user.address == null) throw IllegalArgumentException("Address cannot be null")
+        val address = addressLogic.saveOrFind(user.address!!)
         user.address = address
         return userDao.save(user)
     }

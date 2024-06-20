@@ -1,5 +1,6 @@
 package io.github.abdulroufsidhu.ambaar.branch
 
+import io.github.abdulroufsidhu.ambaar.core.Responser
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -17,26 +18,30 @@ class BranchRequests(
 ) {
     @GetMapping("")
     fun getBranches(
-        @RequestParam("branch") branch: Branch?,
+        branch: Branch?,
         @RequestParam("business_id") businessId: String?
-    ): List<Branch>? {
-        if (businessId == null) return listOf(
-            branchLogic.get(
-                branch ?: throw IllegalArgumentException("business_id and branch both are null")
-            )
-        )
-        return branchLogic.get(businessId)
+    ) = Responser.success {
+        if (businessId == null) {
+            if (branch == null) throw IllegalArgumentException("business_id and branch both are null")
+            listOf( branchLogic.get( branch ) )
+        } else {
+            branchLogic.get(businessId)
+        }
     }
 
     @PutMapping("")
     fun createBranch(
         @RequestBody branch: Branch
-    ) = branchLogic.create(branch)
+    ) = Responser.success {
+        branchLogic.create(branch)
+    }
 
     @PatchMapping("")
     fun updateBranch(
         @RequestBody branch: Branch
-    ) = branchLogic.update(branch)
+    ) = Responser.success {
+        branchLogic.update(branch)
+    }
 
     @DeleteMapping("/{id}")
     fun deleteBranch(@PathVariable("id") id: String) = branchLogic.delete(id)
