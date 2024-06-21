@@ -1,6 +1,7 @@
 package io.github.abdulroufsidhu.ambaar.branch
 
 import io.github.abdulroufsidhu.ambaar.core.Responser
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/branches")
+@CrossOrigin
 class BranchRequests(
     private val branchLogic: BranchLogic
 ) {
