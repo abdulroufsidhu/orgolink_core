@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -17,16 +18,16 @@ import org.springframework.web.bind.annotation.RestController
 class UserRequests(
     private val userLogic: UserLogic,
 ) {
-    @PostMapping("/create")
+    @PutMapping("/create")
     fun createUser(@Valid @RequestBody user: User): Responser<Responser.ResponseObj<User>> =
         Responser.success {
             userLogic.createUser(user)
         }
 
-    @GetMapping("/sign-in")
+    @PostMapping("/sign-in")
     fun signIn(
         @RequestParam("email") email: String,
-        @RequestParam("password") password: String
+        @RequestParam("password") password: String,
     ): Responser<Responser.ResponseObj<User>> = Responser.success {
         userLogic.signIn(email, password)
     }
