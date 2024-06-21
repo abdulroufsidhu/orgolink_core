@@ -17,21 +17,24 @@ class InventoryLogics(
     @Throws(IllegalArgumentException::class, OptimisticLockingFailureException::class)
     fun save(inventory: Inventory): Inventory {
         if (inventory.product == null) throw IllegalArgumentException("Product cannot be null")
-        productLogics.saveProduct(inventory.product!!)
-        return inventoryDao.save(inventory)
+        val product = productLogics.saveOrGetProduct(inventory.product!!)
+        return inventoryDao.save(inventory.copy(product = product))
     }
 
     @Throws(IllegalArgumentException::class, OptimisticLockingFailureException::class)
     fun update(inventory: Inventory): Inventory {
         if (inventory.id == null) throw IllegalArgumentException("Id cannot be null")
-        productLogics.saveProduct(inventory.product!!)
-        return inventoryDao.save(inventory)
+        val product = productLogics.saveOrGetProduct(inventory.product!!)
+        return inventoryDao.save(inventory.copy(product = product))
     }
 
     @Throws(IllegalArgumentException::class)
     fun find(inventory: Inventory, pageNumber: Int): Optional<Page<Inventory>> {
         if (inventory.branch.id == null) throw IllegalArgumentException("Branch cannot be null")
-        return inventoryDao.findByBranchId(inventory.branch.id!!, Pageable.ofSize(perPage).withPage(pageNumber))
+        return inventoryDao.findByBranchId(
+            inventory.branch.id!!,
+            Pageable.ofSize(perPage).withPage(pageNumber)
+        )
     }
 
     fun delete(id: String): String {

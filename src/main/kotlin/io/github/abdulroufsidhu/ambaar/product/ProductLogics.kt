@@ -8,8 +8,13 @@ class ProductLogics(
 ) {
 
     @Throws(NoSuchElementException::class, IllegalArgumentException::class)
-    fun getProduct(product: Product): List<Product> = when {
+    fun getProductInclusiveId(product: Product): List<Product> = when {
         product.id != null -> listOf(productDao.getReferenceById(product.id!!))
+        else -> getProductExcluciveId(product)
+    }
+
+    @Throws(NoSuchElementException::class, IllegalArgumentException::class)
+    fun getProductExcluciveId(product: Product): List<Product> = when {
         product.name != null -> productDao.findByName(product.name!!).orElseThrow()
         product.company != null -> productDao.findByCompany(product.company!!).orElseThrow()
         product.dimentions != null -> productDao.findByDimentions(product.dimentions!!).orElseThrow()
@@ -18,8 +23,10 @@ class ProductLogics(
         else -> throw IllegalArgumentException("Invalid product")
     }
 
+    fun saveOrGetProduct(product: Product): Product = getProductExcluciveId(product).ifEmpty { listOf(saveProduct(product)) }.first()
+
     fun saveProduct(product: Product): Product = productDao.save(product)
 
-    fun deleteProduct(product: Product) = productDao.delete(product)
+    private fun deleteProduct(product: Product) = productDao.delete(product)
 
 }
