@@ -24,8 +24,8 @@ class UserRequests(
         }
 
     data class SignInRequstData(
-        val email: String,
-        val password: String,
+        var email: String,
+        var password: String,
     )
 
     @PostMapping("/sign-in")
