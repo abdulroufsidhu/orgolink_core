@@ -1,6 +1,5 @@
 package io.github.abdulroufsidhu.ambaar.business
 
-import io.github.abdulroufsidhu.ambaar.branch.BranchLogic
 import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.stereotype.Service
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Service
 @Service
 class BusinessLogic(
     private val businessDao: BusinessDao,
-    private val branchLogic: BranchLogic,
 ) {
 
     @Throws(

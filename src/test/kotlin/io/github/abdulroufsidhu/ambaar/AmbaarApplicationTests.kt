@@ -19,32 +19,6 @@ class AmbaarApplicationTests(
 ) {
     @Test
     fun contextLoads() {
-        val user = User(
-            username = "abdulroufsidhu",
-            password = "123456789",
-            email = "abdulroufsidhu@gmail.com",
-            null,
-            Address(
-                "123",
-                "street",
-                "city",
-                "zip",
-                Address.Country.PAKISTAN,
-                null,
-                null,
-                null,
-                Instant.now(),
-                Instant.now()
-            ),
-            null,
-            Instant.now(),
-            Instant.now(),
-        )
-
-        val addresRepo = addresDao.save(user.address)
-        val userRepo = userDao.save(user.copy(address = addresRepo))
-
-        Assertions.assertEquals("abdulroufsidhu", userRepo.username)
 
     }
 

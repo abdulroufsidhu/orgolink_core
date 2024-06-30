@@ -1,6 +1,8 @@
 package io.github.abdulroufsidhu.ambaar.branch
 
 import io.github.abdulroufsidhu.ambaar.address.AddressLogic
+import io.github.abdulroufsidhu.ambaar.business.Business
+import io.github.abdulroufsidhu.ambaar.business.BusinessLogic
 import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.stereotype.Service
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class BranchLogic(
     private val branchDao: BranchDao,
+    private val businessLogic: BusinessLogic,
     private val addressLogic: AddressLogic,
 ) {
 
@@ -17,10 +20,16 @@ class BranchLogic(
     )
     @Transactional
     fun create(branch: Branch): Branch {
+        val bid = if (branch.business?.id.isNullOrBlank()) {
+            businessLogic.create(
+                branch.business ?: throw IllegalArgumentException("Business cannot be null")
+            ).id
+        } else branch.business?.id ?: throw IllegalArgumentException("Business cannot be null")
+
         if (branch.address == null) throw IllegalArgumentException("Address cannot be null")
         val addr = addressLogic.saveOrFind(branch.address!!)
         branch.address = addr
-        return branchDao.save(branch)
+        return branchDao.save(branch.copy(business = Business(id = bid)))
     }
 
     @Throws(

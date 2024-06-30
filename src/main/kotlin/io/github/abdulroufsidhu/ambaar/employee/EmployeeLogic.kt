@@ -1,5 +1,7 @@
 package io.github.abdulroufsidhu.ambaar.employee
 
+import io.github.abdulroufsidhu.ambaar.branch.Branch
+import io.github.abdulroufsidhu.ambaar.branch.BranchLogic
 import io.github.abdulroufsidhu.ambaar.user.UserDao
 import io.github.abdulroufsidhu.ambaar.user.UserLogic
 import jakarta.transaction.Transactional
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service
 @Service
 class EmployeeLogic(
     private val employeeDao: EmployeeDao,
+    private val branchLogic: BranchLogic,
     private val userDao: UserDao,
     private val userLogic: UserLogic,
 ) {
@@ -24,7 +27,10 @@ class EmployeeLogic(
         if (foundUser == null) {
             foundUser = userLogic.createUser(employee.user)
         }
-        return employeeDao.save(employee.copy(user = foundUser))
+        val bid = if (employee.branch.id == null) {
+            branchLogic.create(employee.branch).id
+        } else employee.branch.id
+        return employeeDao.save(employee.copy(user = foundUser, branch = Branch(id = bid)))
     }
 
     @Transactional

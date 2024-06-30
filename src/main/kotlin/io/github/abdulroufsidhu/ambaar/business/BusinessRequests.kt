@@ -16,11 +16,6 @@ class BusinessRequests(
     private val businessLogic: BusinessLogic
 ) {
 
-    @PutMapping("")
-    fun createBusiness(business: Business) = Responser.success {
-        businessLogic.create(business)
-    }
-
     @PatchMapping("")
     fun updateBusiness(business: Business) = Responser.success {
         businessLogic.update(business)

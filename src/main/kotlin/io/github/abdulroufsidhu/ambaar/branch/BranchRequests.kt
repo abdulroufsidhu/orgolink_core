@@ -31,13 +31,6 @@ class BranchRequests(
         }
     }
 
-    @PutMapping("")
-    fun createBranch(
-        @RequestBody branch: Branch
-    ) = Responser.success {
-        branchLogic.create(branch)
-    }
-
     @PatchMapping("")
     fun updateBranch(
         @RequestBody branch: Branch
