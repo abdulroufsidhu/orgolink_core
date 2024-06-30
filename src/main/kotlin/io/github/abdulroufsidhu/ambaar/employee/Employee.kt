@@ -2,7 +2,7 @@ package io.github.abdulroufsidhu.ambaar.employee
 
 import io.github.abdulroufsidhu.ambaar.branch.Branch
 import io.github.abdulroufsidhu.ambaar.core.BaseTable
-import io.github.abdulroufsidhu.ambaar.user.User
+import io.github.abdulroufsidhu.ambaar.user.data_models.User
 import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -22,7 +22,7 @@ import java.time.Instant
 )
 data class Employee(
 
-    var role: String?,
+    var designation: String?,
 
     @ManyToOne(targetEntity = User::class)
     @JoinColumn(name = "user_id")
@@ -39,8 +39,8 @@ data class Employee(
     var active: Boolean = true,
 
     override var id: String? = null,
-    override var createdAt: Instant?=null,
-    override var updatedAt: Instant?=null,
+    override var createdAt: Instant? = null,
+    override var updatedAt: Instant? = null,
 ) : BaseTable(id, createdAt, updatedAt) {
     enum class Permissions {
         CREATE_BUSINESS,

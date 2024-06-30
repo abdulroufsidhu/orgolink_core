@@ -1,6 +1,6 @@
 package io.github.abdulroufsidhu.ambaar.inventory
 
-import io.github.abdulroufsidhu.ambaar.product.ProductLogics
+import io.github.abdulroufsidhu.ambaar.product.ProductLogic
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -9,7 +9,7 @@ import java.util.Optional
 
 @Service
 class InventoryLogics(
-    private val productLogics: ProductLogics,
+    private val productLogic: ProductLogic,
     private val inventoryDao: InventoryDao,
 ) {
     private val perPage = 24
@@ -17,14 +17,14 @@ class InventoryLogics(
     @Throws(IllegalArgumentException::class, OptimisticLockingFailureException::class)
     fun save(inventory: Inventory): Inventory {
         if (inventory.product == null) throw IllegalArgumentException("Product cannot be null")
-        val product = productLogics.saveOrGetProduct(inventory.product!!)
+        val product = productLogic.saveOrGetProduct(inventory.product!!)
         return inventoryDao.save(inventory.copy(product = product))
     }
 
     @Throws(IllegalArgumentException::class, OptimisticLockingFailureException::class)
     fun update(inventory: Inventory): Inventory {
         if (inventory.id == null) throw IllegalArgumentException("Id cannot be null")
-        val product = productLogics.saveOrGetProduct(inventory.product!!)
+        val product = productLogic.saveOrGetProduct(inventory.product!!)
         return inventoryDao.save(inventory.copy(product = product))
     }
 

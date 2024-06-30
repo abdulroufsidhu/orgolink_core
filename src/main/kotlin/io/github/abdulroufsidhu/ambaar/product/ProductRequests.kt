@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/products")
 @CrossOrigin
 class ProductRequests(
-    private val productLogics: ProductLogics
+    private val productLogic: ProductLogic
 ) {
 
     @GetMapping("")
     fun getProducts(product: Product) = Responser.success {
-        productLogics.getProductInclusiveId(product)
+        productLogic.getProductInclusiveId(product)
     }
 
 }

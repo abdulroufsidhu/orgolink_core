@@ -1,14 +1,20 @@
 package io.github.abdulroufsidhu.ambaar.user
 
 import io.github.abdulroufsidhu.ambaar.address.AddressLogic
+import io.github.abdulroufsidhu.ambaar.core.auth.AuthService
+import io.github.abdulroufsidhu.ambaar.user.data_models.SignInRequest
+import io.github.abdulroufsidhu.ambaar.user.data_models.User
 import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class UserLogic(
     private val addressLogic: AddressLogic,
     private val userDao: UserDao,
+    private val encoder: PasswordEncoder,
+    private val authService: AuthService,
 ) {
 
     @Throws(
@@ -21,15 +27,15 @@ class UserLogic(
         if (user.address == null) throw IllegalArgumentException("Address cannot be null")
         val address = addressLogic.saveOrFind(user.address!!)
         user.address = address
-        return userDao.save(user)
+        return userDao.save(user.copy(password = encoder.encode(user.password) ))
     }
 
     @Throws(
         IllegalArgumentException::class,
         NoSuchElementException::class
     )
-    fun signIn(email: String, password: String): User {
-        return userDao.findByEmailAndPassword(email, password).orElseThrow()
+    fun signIn(signInRequest: SignInRequest): String {
+        return authService.authentication(signInRequest)
     }
 
     @Throws(
@@ -50,8 +56,7 @@ class UserLogic(
     @Transactional
     fun updatePassword(userId: String, password: String): User {
         val user = userDao.getReferenceById(userId)
-        user.password = password
-        return userDao.save(user)
+        return userDao.save(user.copy(password = encoder.encode(password)))
     }
 
 }

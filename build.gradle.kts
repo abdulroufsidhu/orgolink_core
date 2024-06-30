@@ -35,9 +35,20 @@ dependencies {
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
+	// swagger generator
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 
+	// json serializer
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+	// jwt
+	implementation("io.jsonwebtoken:jjwt-api:0.12.3")
+	implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
+	implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
+
+	// spring security
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	testImplementation("org.springframework.security:spring-security-test")
 
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")

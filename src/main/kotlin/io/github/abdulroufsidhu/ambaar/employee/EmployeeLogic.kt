@@ -1,5 +1,7 @@
 package io.github.abdulroufsidhu.ambaar.employee
 
+import io.github.abdulroufsidhu.ambaar.user.UserDao
+import io.github.abdulroufsidhu.ambaar.user.UserLogic
 import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.stereotype.Service
@@ -7,6 +9,8 @@ import org.springframework.stereotype.Service
 @Service
 class EmployeeLogic(
     private val employeeDao: EmployeeDao,
+    private val userDao: UserDao,
+    private val userLogic: UserLogic,
 ) {
 
     @Transactional
@@ -14,7 +18,13 @@ class EmployeeLogic(
         IllegalArgumentException::class, OptimisticLockingFailureException::class
     )
     fun create(employee: Employee): Employee {
-        return employeeDao.save(employee)
+        var foundUser =
+            userDao.findByEmail(employee.user.username)
+                .orElse(null)
+        if (foundUser == null) {
+            foundUser = userLogic.createUser(employee.user)
+        }
+        return employeeDao.save(employee.copy(user = foundUser))
     }
 
     @Transactional

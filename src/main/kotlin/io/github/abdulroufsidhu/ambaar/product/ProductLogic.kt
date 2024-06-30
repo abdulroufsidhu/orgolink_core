@@ -3,7 +3,7 @@ package io.github.abdulroufsidhu.ambaar.product
 import org.springframework.stereotype.Service
 
 @Service
-class ProductLogics(
+class ProductLogic(
     private val productDao: ProductDao
 ) {
 

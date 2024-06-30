@@ -2,7 +2,7 @@ package io.github.abdulroufsidhu.ambaar
 
 import io.github.abdulroufsidhu.ambaar.address.Address
 import io.github.abdulroufsidhu.ambaar.address.AddressDao
-import io.github.abdulroufsidhu.ambaar.user.User
+import io.github.abdulroufsidhu.ambaar.user.data_models.User
 import io.github.abdulroufsidhu.ambaar.user.UserDao
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

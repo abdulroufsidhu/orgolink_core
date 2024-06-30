@@ -1,13 +1,9 @@
 package io.github.abdulroufsidhu.ambaar.address
 
-import io.github.abdulroufsidhu.ambaar.branch.Branch
 import io.github.abdulroufsidhu.ambaar.core.BaseTable
-import io.github.abdulroufsidhu.ambaar.user.User
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
-import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
 import java.time.Instant
