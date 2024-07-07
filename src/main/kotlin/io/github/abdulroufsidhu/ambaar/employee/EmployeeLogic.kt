@@ -70,4 +70,7 @@ class EmployeeLogic(
         ).orElseThrow()
     }
 
+    fun get(employeeId: String) =
+        employeeDao.getReferenceById(UUID.fromString(employeeId))
+
 }

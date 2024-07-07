@@ -1,5 +1,6 @@
 package io.github.abdulroufsidhu.ambaar.core.auth
 
+import io.github.abdulroufsidhu.ambaar.core.auth.tokenizer.JwtAuthFilter
 import io.github.abdulroufsidhu.ambaar.user.data_models.User
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

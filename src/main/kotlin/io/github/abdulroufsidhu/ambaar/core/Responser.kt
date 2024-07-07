@@ -31,8 +31,8 @@ sealed class Responser<T>(body: T, status: HttpStatus) : ResponseEntity<T>(body,
             ) as Responser<ResponseObj<T>>
     }
 
-    data class Success<S>(val data: S) : Responser<S>(data,HttpStatus.OK)
+    private data class Success<S>(val data: S) : Responser<S>(data,HttpStatus.OK)
 
-    data class Error<E>(val error: E) : Responser<E>(error,HttpStatus.INTERNAL_SERVER_ERROR)
+    private data class Error<E>(val error: E) : Responser<E>(error,HttpStatus.INTERNAL_SERVER_ERROR)
 
 }

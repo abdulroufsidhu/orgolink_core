@@ -1,4 +1,4 @@
-package io.github.abdulroufsidhu.ambaar.core.auth
+package io.github.abdulroufsidhu.ambaar.core.auth.tokenizer
 
 import io.github.abdulroufsidhu.ambaar.user.SecurityUserService
 import io.github.abdulroufsidhu.ambaar.user.UserDao

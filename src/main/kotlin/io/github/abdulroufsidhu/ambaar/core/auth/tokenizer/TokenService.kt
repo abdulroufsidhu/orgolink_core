@@ -1,4 +1,4 @@
-package io.github.abdulroufsidhu.ambaar.core.auth
+package io.github.abdulroufsidhu.ambaar.core.auth.tokenizer
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts

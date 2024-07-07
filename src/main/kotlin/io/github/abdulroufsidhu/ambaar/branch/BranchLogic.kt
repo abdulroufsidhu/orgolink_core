@@ -52,8 +52,8 @@ class BranchLogic(
         IllegalArgumentException::class, NoSuchElementException::class,
         OptimisticLockingFailureException::class
     )
-    fun get(businessId: String): List<Branch>? {
-        return branchDao.findByBusinessId(UUID.fromString(businessId)).orElseThrow()
+    fun get(businessId: UUID): List<Branch>? {
+        return branchDao.findByBusinessId(businessId).orElseThrow()
     }
 
     @Throws(

@@ -1,4 +1,4 @@
-package io.github.abdulroufsidhu.ambaar.core.auth
+package io.github.abdulroufsidhu.ambaar.core.auth.tokenizer
 
 import io.github.abdulroufsidhu.ambaar.user.SecurityUserService
 import jakarta.servlet.FilterChain
@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
-import kotlin.math.log
 
 @Component
 class JwtAuthFilter(

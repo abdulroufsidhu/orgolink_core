@@ -48,23 +48,17 @@ data class Employee(
     override var updatedAt: Instant? = null,
 ) : BaseTable(id, createdAt, updatedAt) {
     enum class Permissions {
-        CREATE_BUSINESS,
-        READ_BUSINESS,
-        UPDATE_BUSINESS,
-        DELETE_BUSINESS,
-        CREATE_BRANCH,
-        READ_BRANCH,
-        UPDATE_BRANCH,
-        DELETE_BRANCH,
-        CREATE_EMPLOYEE,
-        READ_EMPLOYEE,
-        UPDATE_EMPLOYEE,
-        DELETE_EMPLOYEE,
-        CREATE_INVENTORY,
-        READ_INVENTORY,
-        UPDATE_INVENTORY,
-        DELETE_INVENTORY
-        ;
-
+        BRANCH_CREATE,
+        BRANCH_READ_ALL,
+        BRANCH_UPDATE,
+        BRANCH_DELETE,
+        EMPLOYEE_CREATE,
+        EMPLOYEE_READ_ALL,
+        EMPLOYEE_UPDATE,
+        EMPLOYEE_DELETE,
+        INVENTORY_CREATE,
+        INVENTORY_READ,
+        INVENTORY_UPDATE,
+        INVENTORY_DELETE,
     }
 }
