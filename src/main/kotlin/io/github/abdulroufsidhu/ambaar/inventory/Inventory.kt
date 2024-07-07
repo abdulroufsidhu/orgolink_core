@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.time.Instant
+import java.util.UUID
 
 @Entity
 @Table(name = "inventory")
@@ -34,7 +35,7 @@ data class Inventory(
     @JoinColumn(name = "product_id")
     var product: Product? = null,
 
-    override var id: String? = null,
+    override var id: UUID? = null,
     override var createdAt: Instant? = null,
     override var updatedAt: Instant? = null,
 ) : BaseTable(id, createdAt, updatedAt)

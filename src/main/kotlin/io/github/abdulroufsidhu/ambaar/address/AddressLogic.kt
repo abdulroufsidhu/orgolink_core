@@ -9,23 +9,22 @@ class AddressLogic(
     private val addressDao: AddressDao
 ) {
 
-
     @Throws(IllegalArgumentException::class, NoSuchElementException::class)
     fun saveOrFind(address: Address): Address {
         println("address to find is: $address")
-        val found = findExcludingId(address).getOrNull()
+        val found = findExcludingId(address).getOrNull()?.first()
         println("found address is: $found")
         return found ?: addressDao.save(address)
     }
 
     @Throws(IllegalArgumentException::class, NoSuchElementException::class)
-    fun findIncludingId(address: Address): Optional<Address> {
-        if (address.id.isNullOrBlank().not()) return addressDao.findById(address.id!!)
-        return findExcludingId(address)
+    fun findIncludingId(address: Address): Optional<Set<Address>> {
+        return address.id?.let { Optional.of(setOf(addressDao.getReferenceById(it))) }
+            ?: findExcludingId(address)
     }
 
     @Throws(IllegalArgumentException::class, NoSuchElementException::class)
-    fun findExcludingId(address: Address): Optional<Address> {
+    fun findExcludingId(address: Address): Optional<Set<Address>> {
         if (address.state == null) throw IllegalArgumentException("State is required")
         if (address.city == null) throw IllegalArgumentException("City is required")
         if (address.street == null) throw IllegalArgumentException("Street is required")

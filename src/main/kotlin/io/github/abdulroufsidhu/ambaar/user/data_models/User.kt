@@ -13,10 +13,12 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import jakarta.validation.constraints.Email
+import org.hibernate.proxy.HibernateProxy
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.time.Instant
+import java.util.UUID
 
 @Entity
 @Table(name = "users")
@@ -43,7 +45,7 @@ data class User(
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     var authorities: List<UserAuthorities> = listOf(UserAuthorities.USER),
 
-    override var id: String? = null,
+    override var id: UUID? = null,
     override var createdAt: Instant? = null,
     override var updatedAt: Instant? = null,
 ) : BaseTable(id, createdAt, updatedAt), UserDetails {
@@ -69,5 +71,20 @@ data class User(
 
     override fun isEnabled(): Boolean = true
 
+    final override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null) return false
+
+        other as User
+
+        return id != null && id == other.id
+    }
+
+    final override fun hashCode(): Int = javaClass.hashCode()
+
+    @Override
+    override fun toString(): String {
+        return this::class.simpleName + "(id = $id , createdAt = $createdAt , updatedAt = $updatedAt , createdBy = $createdBy , updatedBy = $updatedBy , fullName = $fullName , password = $password , email = $email , active = $active , authorities = $authorities , id = $id , createdAt = $createdAt , updatedAt = $updatedAt )"
+    }
 
 }

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.Optional
+import java.util.UUID
 
 @Service
 class InventoryLogics(
@@ -38,7 +39,7 @@ class InventoryLogics(
     }
 
     fun delete(id: String): String {
-        inventoryDao.deleteById(id)
+        inventoryDao.deleteById(UUID.fromString(id))
         return "product deleted successfully"
     }
 

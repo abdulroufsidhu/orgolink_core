@@ -7,6 +7,7 @@ import io.github.abdulroufsidhu.ambaar.user.UserLogic
 import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class EmployeeLogic(
@@ -47,7 +48,7 @@ class EmployeeLogic(
         IllegalArgumentException::class, OptimisticLockingFailureException::class
     )
     fun delete(id: String): Employee {
-        val emp = employeeDao.getReferenceById(id)
+        val emp = employeeDao.getReferenceById(UUID.fromString(id))
         return employeeDao.save(emp.copy(active = false))
     }
 
@@ -58,9 +59,12 @@ class EmployeeLogic(
         NoSuchElementException::class,
     )
     fun read(branchId: String?, userId: String?): List<Employee> {
-        return if (!branchId.isNullOrBlank()) employeeDao.findByBranchId(branchId).orElseThrow()
+        return if (!branchId.isNullOrBlank()) employeeDao.findByBranchId(UUID.fromString(branchId))
+            .orElseThrow()
         else employeeDao.findByUserId(
-            userId ?: throw IllegalArgumentException("userId must not be null")
+            UUID.fromString(
+                userId ?: throw IllegalArgumentException("userId must not be null")
+            )
         ).orElseThrow()
     }
 

@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class UserLogic(
@@ -44,7 +45,7 @@ class UserLogic(
     )
     @Transactional
     fun updateUser(user: User): User {
-        if (!user.id.isNullOrBlank())
+        if (user.id != null)
             throw IllegalArgumentException("User id cannot be null or blank")
         return userDao.save(user)
     }
@@ -55,7 +56,7 @@ class UserLogic(
     )
     @Transactional
     fun updatePassword(userId: String, password: String): User {
-        val user = userDao.getReferenceById(userId)
+        val user = userDao.getReferenceById(UUID.fromString(userId))
         return userDao.save(user.copy(password = encoder.encode(password)))
     }
 

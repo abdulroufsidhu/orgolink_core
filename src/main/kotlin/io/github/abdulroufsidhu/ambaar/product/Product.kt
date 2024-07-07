@@ -5,6 +5,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
 import java.time.Instant
+import java.util.UUID
 
 @Entity
 @Table(
@@ -18,7 +19,7 @@ data class Product(
     var company: String?,
     var weight: String?,
     var dimentions: String?,
-    override var id: String?,
+    override var id: UUID?,
     override var createdAt: Instant?=null,
     override var updatedAt: Instant?=null,
 ) : BaseTable(id, createdAt, updatedAt)

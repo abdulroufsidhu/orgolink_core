@@ -3,6 +3,7 @@ package io.github.abdulroufsidhu.ambaar.employee
 import io.github.abdulroufsidhu.ambaar.branch.Branch
 import io.github.abdulroufsidhu.ambaar.core.BaseTable
 import io.github.abdulroufsidhu.ambaar.user.data_models.User
+import jakarta.persistence.Column
 import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -12,6 +13,7 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
 import java.time.Instant
+import java.util.UUID
 
 @Entity
 @Table(
@@ -38,8 +40,11 @@ data class Employee(
 
     var active: Boolean = true,
 
-    override var id: String? = null,
+    @Column(name = "id", nullable = false, updatable = false)
+    override var id: UUID? = null,
+    @Column(name = "created_at", nullable = false, updatable = false)
     override var createdAt: Instant? = null,
+    @Column(name = "updated_at", nullable = false)
     override var updatedAt: Instant? = null,
 ) : BaseTable(id, createdAt, updatedAt) {
     enum class Permissions {
@@ -58,6 +63,8 @@ data class Employee(
         CREATE_INVENTORY,
         READ_INVENTORY,
         UPDATE_INVENTORY,
-        DELETE_INVENTORY,
+        DELETE_INVENTORY
+        ;
+
     }
 }

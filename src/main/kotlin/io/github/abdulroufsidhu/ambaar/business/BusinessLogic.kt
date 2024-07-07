@@ -3,6 +3,7 @@ package io.github.abdulroufsidhu.ambaar.business
 import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class BusinessLogic(
@@ -24,12 +25,12 @@ class BusinessLogic(
     )
     @Transactional
     fun update(business: Business): Business {
-        if (business.id.isNullOrBlank()) throw IllegalArgumentException("id not provided")
+        if (business.id == null) throw IllegalArgumentException("id not provided")
         return businessDao.save(business)
     }
 
     fun delete(id: String): Business {
-        val business = businessDao.getReferenceById(id)
+        val business = businessDao.getReferenceById(UUID.fromString(id))
         return businessDao.save(business.copy(active = false))
     }
 }

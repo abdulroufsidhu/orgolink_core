@@ -14,6 +14,7 @@ import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
 import java.time.Instant
+import java.util.UUID
 
 @Entity
 @Table(
@@ -42,7 +43,10 @@ data class Branch(
     @JoinColumn(name = "business_id")
     var business: Business? = null,
 
-    override var id: String? = null,
+    @Column(name = "id", nullable = false, updatable = false)
+    override var id: UUID? = null,
+    @Column(name = "created_at", nullable = false, updatable = false)
     override var createdAt: Instant? = null,
+    @Column(name = "updated_at", nullable = false)
     override var updatedAt: Instant? = null,
 ) : BaseTable(id, createdAt, updatedAt)

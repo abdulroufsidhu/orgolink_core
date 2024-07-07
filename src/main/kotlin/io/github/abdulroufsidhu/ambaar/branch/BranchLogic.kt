@@ -6,6 +6,7 @@ import io.github.abdulroufsidhu.ambaar.business.BusinessLogic
 import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class BranchLogic(
@@ -20,7 +21,7 @@ class BranchLogic(
     )
     @Transactional
     fun create(branch: Branch): Branch {
-        val bid = if (branch.business?.id.isNullOrBlank()) {
+        val bid = if (branch.business?.id == null) {
             businessLogic.create(
                 branch.business ?: throw IllegalArgumentException("Business cannot be null")
             ).id
@@ -37,7 +38,7 @@ class BranchLogic(
         OptimisticLockingFailureException::class
     )
     fun get(branch: Branch): Branch {
-        if (!branch.id.isNullOrBlank()) return branchDao.getReferenceById(branch.id!!)
+        if (branch.id != null) return branchDao.getReferenceById(branch.id!!)
         if (!branch.email.isNullOrBlank()) return branchDao.findByEmail(branch.email!!)
             .orElseThrow()
         if (!branch.phone.isNullOrBlank()) return branchDao.findByPhone(branch.phone!!)
@@ -50,7 +51,7 @@ class BranchLogic(
         OptimisticLockingFailureException::class
     )
     fun get(businessId: String): List<Branch>? {
-        return branchDao.findByBusinessId(businessId).orElseThrow()
+        return branchDao.findByBusinessId(UUID.fromString(businessId)).orElseThrow()
     }
 
     @Throws(
@@ -70,7 +71,7 @@ class BranchLogic(
         OptimisticLockingFailureException::class
     )
     fun delete(id: String) {
-        val branch = branchDao.getReferenceById(id)
+        val branch = branchDao.getReferenceById(UUID.fromString(id))
         branchDao.save(branch.copy(active = false))
     }
 }
