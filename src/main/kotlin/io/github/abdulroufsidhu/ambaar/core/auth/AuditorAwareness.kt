@@ -7,17 +7,18 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import java.util.Optional
 import java.util.UUID
+import java.util.logging.Logger
 
 
 @Component
 class AuditorAwareness : AuditorAware<UUID> {
+    private val logger = Logger.getLogger(this::class.java.name)
     override fun getCurrentAuditor(): Optional<UUID> {
         val authentication: Authentication? = SecurityContextHolder.getContext().authentication
-
-        if (authentication == null || !authentication.isAuthenticated) {
-            return Optional.empty()
+        logger.info("Authentication: $authentication")
+        if (authentication == null || !authentication.isAuthenticated || authentication.principal == "anonymousUser") {
+            return Optional.ofNullable(null)
         }
-
-        return (authentication.principal as User).id?.let { Optional.of(it) } ?: Optional.empty()
+        return Optional.ofNullable((authentication.principal as User).id)
     }
 }

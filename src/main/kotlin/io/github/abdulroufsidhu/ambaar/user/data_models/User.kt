@@ -13,7 +13,6 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import jakarta.validation.constraints.Email
-import org.hibernate.proxy.HibernateProxy
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -23,20 +22,20 @@ import java.util.UUID
 @Entity
 @Table(name = "users")
 data class User(
-    @Column(nullable = false, unique = true)
-    val fullName: String,
+    @Column(nullable = false, unique = false)
+    val fullName: String?,
     @Column(nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private val password: String,
+    private val password: String?,
     @Column(nullable = false)
     @field:Email(
         message = "Please enter a valid email address",
         regexp = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
     )
-    private val email: String,
+    private val email: String?,
     @ManyToOne(targetEntity = Address::class, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
-    var address: Address,
+    var address: Address?,
 
     var active: Boolean? = true,
 
@@ -59,9 +58,9 @@ data class User(
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> =
         mutableListOf(* authorities.map { SimpleGrantedAuthority(it.name) }.toTypedArray())
 
-    override fun getPassword(): String = password
+    override fun getPassword(): String = password.orEmpty()
 
-    override fun getUsername(): String = email
+    override fun getUsername(): String = email.orEmpty()
 
     override fun isAccountNonExpired(): Boolean = true
 
@@ -70,17 +69,6 @@ data class User(
     override fun isCredentialsNonExpired(): Boolean = super.isCredentialsNonExpired()
 
     override fun isEnabled(): Boolean = true
-
-    final override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null) return false
-
-        other as User
-
-        return id != null && id == other.id
-    }
-
-    final override fun hashCode(): Int = javaClass.hashCode()
 
     @Override
     override fun toString(): String {

@@ -12,7 +12,7 @@ class AddressLogic(
     @Throws(IllegalArgumentException::class, NoSuchElementException::class)
     fun saveOrFind(address: Address): Address {
         println("address to find is: $address")
-        val found = findExcludingId(address).getOrNull()?.first()
+        val found = findExcludingId(address).getOrNull()?.firstOrNull()
         println("found address is: $found")
         return found ?: addressDao.save(address)
     }

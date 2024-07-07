@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.stereotype.Service
 import java.util.UUID
+import java.util.logging.Logger
 
 @Service
 class EmployeeLogic(
@@ -22,6 +23,7 @@ class EmployeeLogic(
         IllegalArgumentException::class, OptimisticLockingFailureException::class
     )
     fun create(employee: Employee): Employee {
+        Logger.getLogger(EmployeeLogic::class.java.name).info("Creating Employee: $employee")
         var foundUser =
             userDao.findByEmail(employee.user.username)
                 .orElse(null)

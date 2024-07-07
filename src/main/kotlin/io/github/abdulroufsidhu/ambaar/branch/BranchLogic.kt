@@ -30,7 +30,9 @@ class BranchLogic(
         if (branch.address == null) throw IllegalArgumentException("Address cannot be null")
         val addr = addressLogic.saveOrFind(branch.address!!)
         branch.address = addr
-        return branchDao.save(branch.copy(business = Business(id = bid)))
+        val saved = branchDao.save(branch.copy(business = Business(id = bid)))
+        println("branch created with data: $saved")
+        return saved
     }
 
     @Throws(

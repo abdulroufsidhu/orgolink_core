@@ -17,10 +17,13 @@ class SecurityUserService(
             ?: throw UsernameNotFoundException("Not found!")
     private fun ApplicationUser.mapToUserDetails(): UserDetails =
         User(
+            id = this.id,
             email = this.username,
             password = this.password,
             address = this.address,
             active = this.active,
             fullName = this.fullName,
+            createdAt = this.createdAt,
+            updatedAt = this.updatedAt,
         )
 }
