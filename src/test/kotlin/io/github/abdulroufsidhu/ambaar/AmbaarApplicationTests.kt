@@ -1,7 +1,7 @@
 package io.github.abdulroufsidhu.ambaar
 
-import io.github.abdulroufsidhu.ambaar.address.AddressDao
-import io.github.abdulroufsidhu.ambaar.user.UserDao
+import io.github.abdulroufsidhu.ambaar.apis.address.AddressDao
+import io.github.abdulroufsidhu.ambaar.apis.user.UserDao
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
