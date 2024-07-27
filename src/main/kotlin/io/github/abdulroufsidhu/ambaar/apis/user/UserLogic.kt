@@ -35,8 +35,8 @@ class UserLogic(
         IllegalArgumentException::class,
         NoSuchElementException::class
     )
-    fun signIn(signInRequest: SignInRequest): String {
-        return authService.authentication(signInRequest)
+    fun signIn(signInRequest: SignInRequest): Map<String, String> {
+        return mapOf( Pair("token",authService.authentication(signInRequest)) )
     }
 
     @Throws(

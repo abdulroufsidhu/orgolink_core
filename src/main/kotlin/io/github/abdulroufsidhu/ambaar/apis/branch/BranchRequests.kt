@@ -40,7 +40,7 @@ class BranchRequests(
     @PutMapping("/{employee_in_business_id}")
     fun createBranch(
         @AuthenticationPrincipal user: User,
-        @RequestBody branch: Branch,
+         branch: Branch,
         @PathVariable("employee_in_business_id") employeeInBusinessId: String,
     ) = Responser.success {
         val employee = employeeLogic.get(employeeInBusinessId)
@@ -67,7 +67,7 @@ class BranchRequests(
 
     @PatchMapping("")
     fun updateBranch(
-        @RequestBody branch: Branch,
+         branch: Branch,
     ) = Responser.success {
         branchLogic.update(branch)
     }

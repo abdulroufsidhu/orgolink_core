@@ -23,8 +23,9 @@ class UserRequests(
     private val userLogic: UserLogic,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
+
     @PutMapping("/create")
-    fun createUser(@ModelAttribute @RequestBody user: User): Responser<ResponseObj<User>> =
+    fun createUser(@ModelAttribute  user: User): Responser<ResponseObj<User>> =
         Responser.success {
             logger.info("incomming user to create is: $user")
             userLogic.createUser(user)
@@ -32,16 +33,20 @@ class UserRequests(
 
     @PostMapping("/sign-in")
     fun signIn(
-        @ModelAttribute @RequestBody signInRequest: SignInRequest,
-    ) = Responser.success {
+        @ModelAttribute  signInRequest: SignInRequest,
+    ) = Responser.success(
+        mapOf(Pair("Hx-Redirect", "/dashboard"))
+    ) {
         logger.info("signInRequest is: $signInRequest")
-        userLogic.signIn(signInRequest)
+        val response = userLogic.signIn(signInRequest)
+        logger.info("signInResponse is: $response")
+        response
     }
 
     @PatchMapping("/update-password/{id}")
     fun updatePassword(
         @PathVariable("id") userId: String,
-        @Valid @RequestBody password: String
+        @Valid  password: String
     ): Responser<ResponseObj<User>> =
         Responser.success {
             userLogic.updatePassword(userId, password)

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="content">
+    <form hx-put="/api/business" >
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="code">Code:</label>
+            <input type="text" id="code" name="code" required>
+        </div>
+        <div>
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="website">Website:</label>
+            <input type="text" id="website" name="website">
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+        <div>
+            <label for="active">Active:</label>
+            <input type="checkbox" id="active" name="active">
+        </div>
+        <div th:insert="~{fieldsets/address :: content}"></div>
+        <div th:insert="~{fieldsets/business :: content}"></div>
+        <button type="submit">Submit</button>
+    </form>
+</section>
+</body>
+</html>

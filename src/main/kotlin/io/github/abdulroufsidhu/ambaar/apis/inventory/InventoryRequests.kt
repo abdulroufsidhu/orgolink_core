@@ -28,14 +28,14 @@ class InventoryRequests(
 
     @PutMapping("")
     fun putInventory(
-        @RequestBody inventory: Inventory
+         inventory: Inventory
     ) = Responser.success{
         inventoryLogics.save(inventory)
     }
 
     @PatchMapping("")
     fun updateInventory(
-        @RequestBody inventory: Inventory
+         inventory: Inventory
     ) = Responser.success {
         inventoryLogics.update(inventory)
     }

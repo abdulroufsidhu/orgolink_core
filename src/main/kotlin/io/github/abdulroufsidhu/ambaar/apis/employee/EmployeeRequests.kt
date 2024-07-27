@@ -29,14 +29,14 @@ class EmployeeRequests(
 
     @PutMapping("")
     fun createEmployee(
-        @RequestBody employee: Employee
+         employee: Employee
     ) = Responser.success {
         employeeLogic.create(employee)
     }
 
     @PatchMapping("")
     fun updateEmployee(
-        @RequestBody employee: Employee
+         employee: Employee
     ) = Responser.success {
         employeeLogic.update(employee)
     }

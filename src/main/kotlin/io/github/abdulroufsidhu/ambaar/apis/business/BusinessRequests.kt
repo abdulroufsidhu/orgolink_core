@@ -26,7 +26,7 @@ class BusinessRequests(
     @PutMapping("")
     fun createBusiness(
         @AuthenticationPrincipal user: User,
-        @RequestBody branch: Branch,
+        branch: Branch,
     ) = Responser.success {
         employeeLogic.create(
             Employee(
@@ -41,7 +41,7 @@ class BusinessRequests(
 
 
     @PatchMapping("")
-    private fun updateBusiness(@RequestBody business: Business) = Responser.success {
+    private fun updateBusiness( business: Business) = Responser.success {
         businessLogic.update(business)
     }
 

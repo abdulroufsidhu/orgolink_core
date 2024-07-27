@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import io.github.abdulroufsidhu.ambaar.apis.address.Address
 import io.github.abdulroufsidhu.ambaar.apis.core.BaseTable
 import io.github.abdulroufsidhu.ambaar.apis.employee.Employee
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.annotation.Nullable
 import jakarta.persistence.Column
@@ -37,18 +38,19 @@ data class User(
         regexp = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
     )
     private val email: String?,
-    @ManyToOne(targetEntity = Address::class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Address::class)
     @JoinColumn(name = "address_id")
     var address: Address?,
 
     @field:Schema(hidden = true)
-    @OneToMany(mappedBy = "user")
+    @Parameter(hidden = true)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     var employments: List<Employee> = listOf(),
 
     var active: Boolean? = true,
 
-    @ElementCollection(targetClass = UserAuthorities::class)
+    @ElementCollection(targetClass = UserAuthorities::class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     var authorities: List<UserAuthorities> = listOf(UserAuthorities.USER),

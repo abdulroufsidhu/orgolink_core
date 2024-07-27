@@ -29,12 +29,12 @@ class SecurityConfig(
             .authorizeHttpRequests { customizer ->
                 customizer
                     .requestMatchers(
-                        "/index",
+                        "*/**",
                         "/api/users/create",
                         "/api/docs/**",
                         "/api/users/sign-in",
                     ).permitAll()
-                    .requestMatchers("*/**").hasAuthority(User.UserAuthorities.USER.name)
+                    .requestMatchers("/api/**").hasAuthority(User.UserAuthorities.USER.name)
 
             }.sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
