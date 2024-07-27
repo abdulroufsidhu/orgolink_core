@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://localhost:35729/livereload.js"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.1"
+            integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/alpinejs@3.4.2/dist/cdn.min.js" defer></script>
+    <meta charset="UTF-8">
+    <script defer>
+        window.onload = function () {
+            document.body.addEventListener('htmx:configRequest', function (evt) {
+                token = window.sessionStorage.getItem("token");
+                console.info(evt.detail.path)
+                console.info(evt)
+                if (!evt.detail.path.includes("/api/users/")) {
+                    evt.detail.headers['Authorization'] = token
+                }
+            });
+        }
+    </script>
+    <title>Ambaar</title>
+    <style>
+        /* form {
+            padding: 2em;
+            background-color: #a5e0c0;
+            border-radius: 2em;
+        }
+        input, textarea, select {
+            display: flex;
+            margin: 0.25em;
+            background-color: #a5e0c0;
+            border: 1px solid black;
+            border-radius: 0.25em;
+            padding: 0.25em;
+        } */
+    </style>
+</head>
+<body hx-boost="true">
+<!-- Placeholder for dynamic content -->
+<div th:insert="~{${content}}"></div>
+</body>
+</html>

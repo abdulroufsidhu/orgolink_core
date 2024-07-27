@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<body>
+    <section th:fragment="content">
+        <script defer >
+            function login(event) {
+                window.sessionStorage.setItem("token", `Bearer ${JSON.parse(event.detail.xhr.response).data.token}`);
+            }
+        </script>
+        <div x-data="{showLogin : true}">
+            <h1>Greetings</h1>
+            <h3>Welcome to Ambaar</h3>
+            <p>A Generic Point Of Sales System with everyone in mind</p>
+
+            <div>
+                <label for="auth-selector">Authenticate Your Self</label>
+                <input type="checkbox" name="auth-selector" @click="showLogin = !showLogin" />
+            </div>
+
+            <div id="login-form" x-show="showLogin">
+                <h3>Login</h3>
+                <form id="login-form" hx-post="/api/users/sign-in" hx-swap="none"
+                    hx-on:htmx:after-request="login(event)" >
+                    <label for="email">Email</label>
+                    <input type="email" name="email" required />
+                    <br>
+                    <div x-data="{ show: false }">
+                        <label for="password">Password:</label>
+                        <input :type="show ? 'text' : 'password'" name="password" required>
+                        <span class="toggle-password" @click="show = !show">👁️</span>
+                    </div>
+                    <br>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+            <div id="signup-form" x-show="!showLogin">
+                <h3>Sign Up</h3>
+                <form id="signup-form" hx-put="/api/users/create" hx-swap="none">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" name="fullName" />
+                    <br>
+                    <label for="email">Email</label>
+                    <input type="email" name="email" required />
+                    <br>
+                    <div x-data="{ show: false }">
+                        <label for="password">Password:</label>
+                        <input :type="show ? 'text' : 'password'" name="password" required>
+                        <span class="toggle-password" @click="show = !show">👁️</span>
+                    </div>
+                    <br>
+
+                    <div th:insert="fieldsets/address :: content"></div>
+                    <input type="submit" />
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
