@@ -1,40 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <body>
-<section th:fragment="content">
-    <form hx-put="/api/business" >
-        <div>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-        </div>
-        <div>
-            <label for="code">Code:</label>
-            <input type="text" id="code" name="code" required>
-        </div>
-        <div>
-            <label for="phone">Phone:</label>
-            <input type="text" id="phone" name="phone" required>
-        </div>
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div>
-            <label for="website">Website:</label>
-            <input type="text" id="website" name="website">
-        </div>
-        <div>
-            <label for="description">Description:</label>
-            <textarea id="description" name="description"></textarea>
-        </div>
-        <div>
-            <label for="active">Active:</label>
-            <input type="checkbox" id="active" name="active">
-        </div>
-        <div th:insert="~{fieldsets/address :: content}"></div>
-        <div th:insert="~{fieldsets/business :: content}"></div>
-        <button type="submit">Submit</button>
-    </form>
-</section>
+    <section th:fragment="content">
+        <script defer>
+            let user = JSON.parse(window.sessionStorage.getItem("user"));
+            window.onload = function () {
+                user.employments.map((e, index) => {
+                    console.info("employements", e)
+                    let option = document.createElement("option");
+                    option.text = e.branch.business.name;
+                    option.value = e.branch.business.id;
+                    document.getElementById("business-select").add(option);
+                    if (index === 0) {
+                        setBranchesSelector(e.branch.business.id);
+                    }
+                });
+                document.getElementById("business-select").addEventListener("change", (evt) => {
+                    let selectedBusiness = evt.target.value;
+                    setBranchesSelector(selectedBusiness);
+                });
+                document.getElementById("branch-select").addEventListener("change", (evt) => {
+                    setEmployee(evt.target.value);
+                })
+
+            }
+            function setBranchesSelector(businessId) {
+                user.employments.filter(e => e.branch.business.id === businessId).map((e, index) => {
+                    let option = document.createElement("option");
+                    option.text = e.branch.code;
+                    option.value = e.branch.id;
+
+                    let branchesSelect = document.getElementById("branch-select");
+                    branchesSelect.innerHTML = "";
+                    branchesSelect.add(option);
+                    if (index === 0) {
+                        setEmployee(e.branch.id);
+                    }
+                })
+            }
+
+            function setEmployee(branchId) {
+                let employeeId = user.employments.filter((e) => e.branch.id === branchId)[0].id;
+                window.sessionStorage.setItem("activeEmployeeId", employeeId);
+            }
+
+        </script>
+        <select id="business-select"></select>
+        <div th:insert="dialogues/add_business.html :: content"></div>
+        <select id="branch-select"></select>
+        <div th:insert="dialogues/add_branch.html :: content"></div>
+    </section>
 </body>
+
 </html>

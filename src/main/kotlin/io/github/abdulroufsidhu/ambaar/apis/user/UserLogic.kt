@@ -3,6 +3,7 @@ package io.github.abdulroufsidhu.ambaar.apis.user
 import io.github.abdulroufsidhu.ambaar.apis.address.AddressLogic
 import io.github.abdulroufsidhu.ambaar.apis.core.auth.AuthService
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.SignInRequest
+import io.github.abdulroufsidhu.ambaar.apis.user.data_models.SignInResponse
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.User
 import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
@@ -28,15 +29,15 @@ class UserLogic(
         if (user.address == null) throw IllegalArgumentException("Address cannot be null")
         val address = addressLogic.saveOrFind(user.address!!)
         user.address = address
-        return userDao.save(user.copy(password = encoder.encode(user.password) ))
+        return userDao.save(user.copy(password = encoder.encode(user.password)))
     }
 
     @Throws(
         IllegalArgumentException::class,
         NoSuchElementException::class
     )
-    fun signIn(signInRequest: SignInRequest): Map<String, String> {
-        return mapOf( Pair("token",authService.authentication(signInRequest)) )
+    fun signIn(signInRequest: SignInRequest): SignInResponse {
+        return authService.authentication(signInRequest)
     }
 
     @Throws(

@@ -4,6 +4,7 @@ import io.github.abdulroufsidhu.ambaar.apis.user.SecurityUserService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -44,7 +45,6 @@ class JwtAuthFilter(
 
         if (SecurityContextHolder.getContext().authentication == null) {
             val foundUser = userDetailsService.loadUserByUsername(email)
-            logger.info("foundUser: $foundUser")
 
             val isTokenValid = tokenService.isValid(jwtToken, foundUser)
             logger.info("isTokenValid: $isTokenValid")

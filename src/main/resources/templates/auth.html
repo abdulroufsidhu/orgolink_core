@@ -6,6 +6,7 @@
         <script defer >
             function login(event) {
                 window.sessionStorage.setItem("token", `Bearer ${JSON.parse(event.detail.xhr.response).data.token}`);
+                window.sessionStorage.setItem("user", JSON.stringify(JSON.parse(event.detail.xhr.response).data.user));
             }
         </script>
         <div x-data="{showLogin : true}">

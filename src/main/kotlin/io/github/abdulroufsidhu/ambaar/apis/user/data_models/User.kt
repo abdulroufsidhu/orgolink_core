@@ -1,5 +1,6 @@
 package io.github.abdulroufsidhu.ambaar.apis.user.data_models
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.github.abdulroufsidhu.ambaar.apis.address.Address
 import io.github.abdulroufsidhu.ambaar.apis.core.BaseTable
@@ -44,7 +45,7 @@ data class User(
 
     @field:Schema(hidden = true)
     @Parameter(hidden = true)
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", )
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     var employments: List<Employee> = listOf(),
 
@@ -52,7 +53,7 @@ data class User(
 
     @ElementCollection(targetClass = UserAuthorities::class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY,)
     var authorities: List<UserAuthorities> = listOf(UserAuthorities.USER),
 
     override var id: UUID? = null,

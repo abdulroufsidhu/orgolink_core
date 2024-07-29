@@ -15,7 +15,6 @@ class Auditor : AuditorAware<UUID> {
     private val logger = Logger.getLogger(this::class.java.name)
     override fun getCurrentAuditor(): Optional<UUID> {
         val authentication: Authentication? = SecurityContextHolder.getContext().authentication
-        logger.info("Authentication: $authentication")
         if (authentication == null || !authentication.isAuthenticated || authentication.principal == "anonymousUser") {
             return Optional.ofNullable(null)
         }

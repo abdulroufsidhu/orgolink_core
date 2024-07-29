@@ -5,6 +5,7 @@ import io.github.abdulroufsidhu.ambaar.apis.core.auth.PermissionVerifier
 import io.github.abdulroufsidhu.ambaar.apis.employee.Employee
 import io.github.abdulroufsidhu.ambaar.apis.employee.EmployeeLogic
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.User
+import jakarta.transaction.Transactional
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -12,10 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+@Transactional
 @RestController
 @RequestMapping("/api/branches")
 @CrossOrigin
@@ -40,7 +41,7 @@ class BranchRequests(
     @PutMapping("/{employee_in_business_id}")
     fun createBranch(
         @AuthenticationPrincipal user: User,
-         branch: Branch,
+        branch: Branch,
         @PathVariable("employee_in_business_id") employeeInBusinessId: String,
     ) = Responser.success {
         val employee = employeeLogic.get(employeeInBusinessId)
@@ -67,7 +68,7 @@ class BranchRequests(
 
     @PatchMapping("")
     fun updateBranch(
-         branch: Branch,
+        branch: Branch,
     ) = Responser.success {
         branchLogic.update(branch)
     }

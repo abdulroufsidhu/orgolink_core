@@ -1,6 +1,7 @@
 package io.github.abdulroufsidhu.ambaar.apis.inventory
 
 import io.github.abdulroufsidhu.ambaar.apis.core.Responser
+import jakarta.transaction.Transactional
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
+@Transactional
 @RestController
 @RequestMapping("/api/inventory")
 @CrossOrigin

@@ -23,7 +23,7 @@ class EmployeeLogic(
         IllegalArgumentException::class, OptimisticLockingFailureException::class
     )
     fun create(employee: Employee): Employee {
-        Logger.getLogger(EmployeeLogic::class.java.name).info("Creating Employee: $employee")
+//        Logger.getLogger(EmployeeLogic::class.java.name).info("Creating Employee: $employee")
         var foundUser =
             userDao.findByEmail(employee.user.username)
                 .orElse(null)

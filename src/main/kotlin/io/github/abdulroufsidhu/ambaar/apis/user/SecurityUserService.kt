@@ -1,5 +1,7 @@
 package io.github.abdulroufsidhu.ambaar.apis.user
 
+import io.github.abdulroufsidhu.ambaar.apis.user.data_models.User
+import jakarta.transaction.Transactional
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -9,7 +11,8 @@ import org.springframework.stereotype.Service
 class SecurityUserService(
     private val userRepository: UserDao
 ) : UserDetailsService {
-    override fun loadUserByUsername(username: String): UserDetails =
+
+    override fun loadUserByUsername(username: String): User =
         userRepository.findByEmail(username).orElseThrow()
             ?: throw UsernameNotFoundException("Not found!")
 }
