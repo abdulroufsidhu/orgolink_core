@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="content" x-data="{showDialog:false}">
+    <script>
+        function closeDialog(evt) {
+            document.querySelector("#cancel_business_add").click();
+        } 
+    </script>
+    <dialog :open="showDialog">
+        <h3>Add Business</h3>
+        <form hx-put="/api/business" method="dialog" hx-swap="none" hx-on:htmx:after-request="closeDialog(event)">
+            <div th:insert="~{fieldsets/branch :: content}"></div>
+            <div th:insert="~{fieldsets/address :: content}"></div>
+            <div th:insert="~{fieldsets/business :: content}"></div>
+            <button type="submit">Submit</button>
+            <button id="cancel_business_add" type="reset" @click="showDialog = false">Cancel</button>
+        </form>
+    </dialog>
+    <button @click="showDialog = !showDialog">Add Business</button>
+</section>
+</html>
