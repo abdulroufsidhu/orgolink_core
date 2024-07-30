@@ -2,32 +2,32 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <!-- Placeholder for dynamic content -->
-<section th:fragment="content">
+<section th:fragment="content (name_prepend)">
     <fieldset>
         <legend>Address</legend>
         <div>
             <label for="houseNumber">House Number:</label>
-            <input type="text" id="houseNumber" name="address.houseNumber" required>
+            <input type="text" th:name="${name_prepend} + 'houseNumber'" required>
         </div>
         <div>
             <label for="street">Street:</label>
-            <input type="text" id="street" name="address.street" required>
+            <input type="text" th:name="${name_prepend} + 'street'" required>
         </div>
         <div>
             <label for="city">City:</label>
-            <input type="text" id="city" name="address.city" required>
+            <input type="text" th:name="${name_prepend} + 'city'" required>
         </div>
         <div>
             <label for="state">State:</label>
-            <input type="text" id="state" name="address.state" required>
+            <input type="text" th:name="${name_prepend} + 'state'" required>
         </div>
         <div>
             <label for="zip">Zip Code:</label>
-            <input type="text" id="zip" name="address.zip" required>
+            <input type="text" th:name="${name_prepend} + 'zip'" required>
         </div>
         <div>
             <label for="country">Country:</label>
-            <select id="country" name="address.country" required default="PAKISTAN">
+            <select th:name="${name_prepend} + 'country'" required default="PAKISTAN">
                 <option value="AFGHANISTAN">AFGHANISTAN</option>
                 <option value="ALBANIA">ALBANIA</option>
                 <option value="ALGERIA">ALGERIA</option>

@@ -2,36 +2,36 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <!-- Placeholder for dynamic content -->
-<section th:fragment="content">
+<section th:fragment="content (name_prepend)">
     <fieldset>
         <legend>Branch</legend>
         <div>
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" th:name="${name_prepend} + 'name'" required>
         </div>
         <div>
             <label for="code">Code:</label>
-            <input type="text" id="code" name="code" required>
+            <input type="text" th:name="${name_prepend} + 'code'" required>
         </div>
         <div>
             <label for="phone">Phone:</label>
-            <input type="text" id="phone" name="phone" required>
+            <input type="text" th:name="${name_prepend} + 'phone'" required>
         </div>
         <div>
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" th:name="${name_prepend} + 'email'" required>
         </div>
         <div>
             <label for="website">Website:</label>
-            <input type="text" id="website" name="website">
+            <input type="text" th:name="${name_prepend} + 'website'">
         </div>
         <div>
             <label for="description">Description:</label>
-            <textarea id="description" name="description"></textarea>
+            <textarea th:name="${name_prepend} + 'description'"></textarea>
         </div>
         <div>
             <label for="active">Active:</label>
-            <input type="checkbox" id="active" name="active">
+            <input type="checkbox" th:name="${name_prepend} + 'active'">
         </div>
     </fieldset>
 </section>

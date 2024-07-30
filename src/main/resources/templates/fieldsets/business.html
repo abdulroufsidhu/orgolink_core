@@ -2,24 +2,24 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <!-- Placeholder for dynamic content -->
-<section th:fragment="content">
+<section th:fragment="content (name_prepend)">
     <fieldset>
         <legend>Business</legend>
             <div>
                 <label for="businessName">Name:</label>
-                <input type="text" id="businessName" name="business.name" required>
+                <input type="text" th:name="${name_prepend} + 'name'" required>
             </div>
             <div>
                 <label for="businessDescription">Description:</label>
-                <textarea id="businessDescription" name="business.description"></textarea>
+                <textarea th:name="${name_prepend} + 'description'"></textarea>
             </div>
             <div>
                 <label for="licence">Licence:</label>
-                <input type="text" id="licence" name="business.licence" required>
+                <input type="text" th:name="${name_prepend} + 'licence'" required>
             </div>
             <div>
                 <label for="businessActive">Active:</label>
-                <input type="checkbox" id="businessActive" name="business.active">
+                <input type="checkbox" th:name="${name_prepend} + 'active'">
             </div>
     </fieldset>
 </section>
