@@ -21,6 +21,7 @@ class SecurityConfig(
     fun securityFilterChain(
         http: HttpSecurity,
         jwtAuthenticationFilter: JwtAuthFilter,
+        employeeFilter: EmployeeFilter,
     ): SecurityFilterChain {
         http
             .csrf {
@@ -40,7 +41,7 @@ class SecurityConfig(
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }.authenticationProvider(authenticationProvider).addFilterBefore(
                 jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java
-            )
+            ).addFilterAfter(employeeFilter, UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }
 

@@ -4,11 +4,11 @@ import io.github.abdulroufsidhu.ambaar.apis.branch.Branch
 import io.github.abdulroufsidhu.ambaar.apis.branch.BranchLogic
 import io.github.abdulroufsidhu.ambaar.apis.user.UserDao
 import io.github.abdulroufsidhu.ambaar.apis.user.UserLogic
+import jakarta.persistence.EntityNotFoundException
 import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.stereotype.Service
 import java.util.UUID
-import java.util.logging.Logger
 
 @Service
 class EmployeeLogic(
@@ -28,7 +28,8 @@ class EmployeeLogic(
             userDao.findByEmail(employee.user.username)
                 .orElse(null)
         if (foundUser == null) {
-            foundUser = userLogic.createUser(employee.user)
+            foundUser = userLogic.createUser(employee.user).user
+                ?: throw IllegalArgumentException("user cannot be null")
         }
         val bid = if (employee.branch.id == null) {
             branchLogic.create(employee.branch).id
@@ -70,7 +71,19 @@ class EmployeeLogic(
         ).orElseThrow()
     }
 
-    fun get(employeeId: String) =
-        employeeDao.getReferenceById(UUID.fromString(employeeId))
+    @Transactional
+    @Throws(
+        IllegalArgumentException::class,
+        OptimisticLockingFailureException::class,
+        NoSuchElementException::class,
+    )
+    fun read(userId: UUID?): List<Employee> {
+        return employeeDao.findByUserId(
+            userId ?: throw IllegalArgumentException("userId must not be null")
+        ).orElseThrow()
+    }
+
+    @Throws(EntityNotFoundException::class)
+    fun get(employeeId: String) = employeeDao.findByEmployeeId(UUID.fromString(employeeId))
 
 }

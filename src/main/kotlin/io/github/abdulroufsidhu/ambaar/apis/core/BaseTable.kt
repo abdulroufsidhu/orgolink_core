@@ -25,31 +25,31 @@ abstract class BaseTable(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, updatable = false)
-    @field:Schema(hidden = true)
+
     @Parameter(hidden = true)
     open var id: UUID?,
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     @JsonProperty("created_at", access = JsonProperty.Access.READ_ONLY)
-    @field:Schema(hidden = true)
+
     @Parameter(hidden = true)
     open var createdAt: Instant?,
     @JsonProperty("updated_at", access = JsonProperty.Access.READ_ONLY)
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
-    @field:Schema(hidden = true)
+
     open var updatedAt: Instant?,
     @Parameter(hidden = true)
     @CreatedBy
     @Column(name = "created_by", nullable = true, updatable = false)
     @JsonProperty("created_by", access = JsonProperty.Access.READ_ONLY)
-    @field:Schema(hidden = true)
+
     @Parameter(hidden = true)
     var createdBy: UUID? = null,
     @LastModifiedBy
     @Column(name = "updated_by", nullable = true)
     @JsonProperty("updated_by", access = JsonProperty.Access.READ_ONLY)
-    @field:Schema(hidden = true)
+
     @Parameter(hidden = true)
     var updatedBy: UUID? = null,
 ) {

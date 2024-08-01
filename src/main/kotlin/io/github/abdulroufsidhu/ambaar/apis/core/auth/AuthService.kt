@@ -27,8 +27,6 @@ class AuthService(
         return SignInResponse(accessToken, user.copy(password = ""))
     }
 
-    private fun createAccessToken(user: UserDetails) = tokenService.generate(
-        userDetails = user
-    )
+    private fun createAccessToken(user: UserDetails) = tokenService.generate( userDetails = user )
 
 }

@@ -1,10 +1,15 @@
 package io.github.abdulroufsidhu.ambaar.apis.employee
 
+import org.springframework.data.jpa.repository.EntityGraph
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
 import java.util.Optional
 import java.util.UUID
 
 interface EmployeeDao: JpaRepository<Employee, UUID> {
+
+    @Query("SELECT e FROM Employee e WHERE e.id = :id")
+    fun findByEmployeeId(id: UUID) : Optional<Employee>
     fun findByBranchId(branchId: UUID): Optional<List<Employee>>
 
     fun findByUserId(userId: UUID): Optional<List<Employee>>

@@ -2,20 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-    <section th:fragment="content">
+    <section th:fragment="content" >
+        <div hx-get="/api/employee" hx-swap="none" hx-trigger="once delay:500ms"
+        hx-on:htmx:after-request="setupEmployees(event)" ></div>
+
+        <div>
+            <select id="business-select"></select>
+            <div th:insert="dialogues/add_business.html :: content"></div>
+            <select id="branch-select"></select>
+            <div th:insert="dialogues/add_branch.html :: content"></div>
+        </div>
         <script defer>
             let user = JSON.parse(window.sessionStorage.getItem("user"));
-            window.onload = function () {
-                user.employments.map((e, index) => {
-                    console.info("employements", e)
+            async function loadSelectorValues() {
+                let employments = JSON.parse(window.sessionStorage.getItem("employments"))
+                const emp = {};
+                employments.forEach(element => {
+                    emp[element.branch.business.id] = element.branch.business.name;
+                });
+                for (const [index, [key, value]] of Object.entries(emp).entries()) {
                     let option = document.createElement("option");
-                    option.text = e.branch.business.name;
-                    option.value = e.branch.business.id;
+                    option.text = value;
+                    option.value = key;
                     document.getElementById("business-select").add(option);
                     if (index === 0) {
-                        setBranchesSelector(e.branch.business.id);
+                        setBranchesSelector(key);
                     }
-                });
+                }
                 document.getElementById("business-select").addEventListener("change", (evt) => {
                     let selectedBusiness = evt.target.value;
                     setBranchesSelector(selectedBusiness);
@@ -23,16 +36,17 @@
                 document.getElementById("branch-select").addEventListener("change", (evt) => {
                     setEmployee(evt.target.value);
                 })
-
             }
+
             function setBranchesSelector(businessId) {
-                user.employments.filter(e => e.branch.business.id === businessId).map((e, index) => {
+                let employments = JSON.parse(window.sessionStorage.getItem("employments"))
+                let branchesSelect = document.getElementById("branch-select");
+                branchesSelect.innerHTML = "";
+                employments?.filter(e => e.branch.business.id === businessId).map((e, index) => {
                     let option = document.createElement("option");
                     option.text = e.branch.code;
                     option.value = e.branch.id;
 
-                    let branchesSelect = document.getElementById("branch-select");
-                    branchesSelect.innerHTML = "";
                     branchesSelect.add(option);
                     if (index === 0) {
                         setEmployee(e.branch.id);
@@ -41,15 +55,17 @@
             }
 
             function setEmployee(branchId) {
-                let employeeId = user.employments.filter((e) => e.branch.id === branchId)[0].id;
+                let employments = JSON.parse(window.sessionStorage.getItem("employments"))
+                let employeeId = employments?.filter((e) => e.branch.id === branchId)[0].id;
                 window.sessionStorage.setItem("activeEmployeeId", employeeId);
             }
 
+            function setupEmployees(evt) {
+                window.sessionStorage.setItem("employments", JSON.stringify(JSON.parse(evt.detail.xhr.response).data));
+                loadSelectorValues()
+            }
+
         </script>
-        <select id="business-select"></select>
-        <div th:insert="dialogues/add_business.html :: content"></div>
-        <select id="branch-select"></select>
-        <div th:insert="dialogues/add_branch.html :: content"></div>
     </section>
 </body>
 

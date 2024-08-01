@@ -6,6 +6,7 @@ import io.github.abdulroufsidhu.ambaar.apis.user.data_models.SignInRequest
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.SignInResponse
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.User
 import jakarta.transaction.Transactional
+import org.slf4j.LoggerFactory
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -19,17 +20,20 @@ class UserLogic(
     private val authService: AuthService,
 ) {
 
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
     @Throws(
         IllegalArgumentException::class,
         OptimisticLockingFailureException::class,
         NoSuchElementException::class,
     )
     @Transactional
-    fun createUser(user: User): User {
+    fun createUser(user: User): SignInResponse {
         if (user.address == null) throw IllegalArgumentException("Address cannot be null")
         val address = addressLogic.saveOrFind(user.address!!)
         user.address = address
-        return userDao.save(user.copy(password = encoder.encode(user.password)))
+        val u = userDao.save(user.copy(password = encoder.encode(user.password)))
+        return authService.authentication(SignInRequest(u.username, user.password))
     }
 
     @Throws(
@@ -37,7 +41,9 @@ class UserLogic(
         NoSuchElementException::class
     )
     fun signIn(signInRequest: SignInRequest): SignInResponse {
-        return authService.authentication(signInRequest)
+        val signInResponse = authService.authentication(signInRequest)
+        logger.info("signInResponse: $signInResponse")
+        return signInResponse
     }
 
     @Throws(

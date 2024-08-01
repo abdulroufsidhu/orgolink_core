@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="http://localhost:35729/livereload.js"></script>
     <script src="https://unpkg.com/htmx.org@2.0.1"
-            integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/"
-            crossorigin="anonymous"></script>
+        integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/"
+        crossorigin="anonymous"></script>
     <script src="https://unpkg.com/alpinejs@3.4.2/dist/cdn.min.js" defer></script>
     <script src="https://unpkg.com/htmx.org@2.0.1/dist/ext/client-side-templates.js"></script>
     <script src="https://unpkg.com/mustache@latest"></script>
     <meta charset="UTF-8">
     <script defer>
-        window.onload = function () {
+        function onPageLoad() {
             document.body.addEventListener('htmx:configRequest', function (evt) {
                 token = window.sessionStorage.getItem("token");
-                console.info(evt.detail.path)
-                console.info(evt)
+                employeeId = window.sessionStorage.getItem("activeEmployeeId");
                 if (!evt.detail.path.includes("/api/users/")) {
                     evt.detail.headers['Authorization'] = token
+                    evt.detail.headers['x-emp'] = employeeId
                 }
             });
         }
+        window.onload = onPageLoad;
     </script>
     <title>Ambaar</title>
     <style>
@@ -40,8 +42,10 @@
         } */
     </style>
 </head>
+
 <body hx-boost="true">
-<!-- Placeholder for dynamic content -->
-<div th:insert="~{${content}}"></div>
+    <!-- Placeholder for dynamic content -->
+    <div th:insert="~{${content}}"></div>
 </body>
+
 </html>

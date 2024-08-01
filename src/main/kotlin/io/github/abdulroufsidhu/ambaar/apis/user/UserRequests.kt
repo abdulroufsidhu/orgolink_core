@@ -3,6 +3,7 @@ package io.github.abdulroufsidhu.ambaar.apis.user
 import io.github.abdulroufsidhu.ambaar.apis.core.ResponseObj
 import io.github.abdulroufsidhu.ambaar.apis.core.Responser
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.SignInRequest
+import io.github.abdulroufsidhu.ambaar.apis.user.data_models.SignInResponse
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.User
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
@@ -26,9 +27,10 @@ class UserRequests(
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     @PutMapping("/create")
-    fun createUser(@ModelAttribute user: User): Responser<ResponseObj<User>> =
-        Responser.success {
-            logger.info("incomming user to create is: $user")
+    fun createUser(@ModelAttribute user: User): Responser<ResponseObj<SignInResponse>> =
+        Responser.success(
+            mapOf(Pair("Hx-Redirect", "/dashboard"))
+        ) {
             userLogic.createUser(user)
         }
 

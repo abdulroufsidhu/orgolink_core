@@ -19,6 +19,8 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import jakarta.validation.constraints.Email
+import org.hibernate.annotations.LazyCollection
+import org.hibernate.annotations.LazyCollectionOption
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -39,22 +41,16 @@ data class User(
         regexp = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
     )
     private val email: String?,
-    @ManyToOne(targetEntity = Address::class)
+    @ManyToOne(targetEntity = Address::class, fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
     var address: Address?,
-
-    @field:Schema(hidden = true)
-    @Parameter(hidden = true)
-    @OneToMany(mappedBy = "user", )
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    var employments: List<Employee> = listOf(),
 
     var active: Boolean? = true,
 
     @ElementCollection(targetClass = UserAuthorities::class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY,)
-    var authorities: List<UserAuthorities> = listOf(UserAuthorities.USER),
+    var authorities: Set<UserAuthorities> = setOf(UserAuthorities.USER),
 
     override var id: UUID? = null,
     override var createdAt: Instant? = null,

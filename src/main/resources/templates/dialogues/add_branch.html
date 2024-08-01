@@ -9,7 +9,7 @@
     </script>
     <dialog :open="showDialog">
         <h3>Add Branch</h3>
-        <form hx-put="/api/branch" method="dialog" hx-swap="none" hx-on:htmx:after-request="closeDialog(event)">
+        <form hx-put="/api/branches" method="dialog" hx-swap="none" hx-on:htmx:after-request="closeDialog(event)">
             <div th:insert="~{fieldsets/branch :: content(name_prepend='')}"></div>
             <div th:insert="~{fieldsets/address :: content(name_prepend='address.')}"></div>
             <button type="submit">Submit</button>

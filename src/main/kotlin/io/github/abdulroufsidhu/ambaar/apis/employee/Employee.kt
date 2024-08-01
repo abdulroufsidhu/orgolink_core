@@ -28,9 +28,8 @@ data class Employee(
 
     var designation: String?,
 
-    @ManyToOne(targetEntity = User::class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = User::class)
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     var user: User,
 
     @ManyToOne(targetEntity = Branch::class)
