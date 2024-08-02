@@ -4,7 +4,8 @@
 <section th:fragment="content" x-data="{showDialog:false}">
     <script>
         function closeDialog(evt) {
-            document.querySelector("#cancel_business_add").click();
+            document.querySelector("#cancel_branch_add").click();
+            document.getElementById("employment-data-loader-api-call").click()
         }
     </script>
     <dialog :open="showDialog" style="align-items: flex-start; overflow: auto;">
@@ -15,7 +16,7 @@
                 <div th:insert="~{fieldsets/address :: content(name_prepend='address.')}"></div>
                 <div style="display: flex; flex-wrap: wrap;">
                     <button type="submit">Submit</button>
-                    <button id="cancel_business_add" type="reset" @click="showDialog = false">Cancel</button>
+                    <button id="cancel_branch_add" type="reset" @click="showDialog = false">Cancel</button>
                 </div>
             </form>
         </article>
