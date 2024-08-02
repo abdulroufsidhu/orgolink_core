@@ -11,39 +11,27 @@
     <script src="https://unpkg.com/alpinejs@3.4.2/dist/cdn.min.js" defer></script>
     <script src="https://unpkg.com/htmx.org@2.0.1/dist/ext/client-side-templates.js"></script>
     <script src="https://unpkg.com/mustache@latest"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
     <meta charset="UTF-8">
     <script defer>
-        function onPageLoad() {
-            document.body.addEventListener('htmx:configRequest', function (evt) {
-                token = window.sessionStorage.getItem("token");
-                employeeId = window.sessionStorage.getItem("activeEmployeeId");
-                if (!evt.detail.path.includes("/api/users/")) {
-                    evt.detail.headers['Authorization'] = token
-                    evt.detail.headers['x-emp'] = employeeId
-                }
-            });
+        document.addEventListener('DOMContentLoaded', onPageLoad);
+        function setHtmxRequestHeaders(evt) {
+            token = window.sessionStorage.getItem("token");
+            employeeId = window.sessionStorage.getItem("activeEmployeeId");
+            if (!evt.detail.path.includes("/api/users/")) {
+                evt.detail.headers['Authorization'] = token
+                evt.detail.headers['x-emp'] = employeeId
+            }
         }
-        window.onload = onPageLoad;
+        function onPageLoad() {
+            document.body.addEventListener('htmx:configRequest', setHtmxRequestHeaders);
+        }
     </script>
     <title>Ambaar</title>
-    <style>
-        /* form {
-            padding: 2em;
-            background-color: #a5e0c0;
-            border-radius: 2em;
-        }
-        input, textarea, select {
-            display: flex;
-            margin: 0.25em;
-            background-color: #a5e0c0;
-            border: 1px solid black;
-            border-radius: 0.25em;
-            padding: 0.25em;
-        } */
-    </style>
 </head>
 
-<body hx-boost="true">
+<body hx-boost="true" class="container" style="padding: 0.5em;">
     <!-- Placeholder for dynamic content -->
     <div th:insert="~{${content}}"></div>
 </body>

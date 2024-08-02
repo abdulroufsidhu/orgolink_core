@@ -3,25 +3,27 @@
 <body>
 <!-- Placeholder for dynamic content -->
 <section th:fragment="content (name_prepend)">
-    <fieldset>
-        <legend>Business</legend>
-            <div>
-                <label for="businessName">Name:</label>
-                <input type="text" th:name="${name_prepend} + 'name'" required>
-            </div>
-            <div>
-                <label for="businessDescription">Description:</label>
-                <textarea th:name="${name_prepend} + 'description'"></textarea>
-            </div>
-            <div>
-                <label for="licence">Licence:</label>
-                <input type="text" th:name="${name_prepend} + 'licence'" required>
-            </div>
-            <div>
-                <label for="businessActive">Active:</label>
-                <input type="checkbox" th:name="${name_prepend} + 'active'">
-            </div>
-    </fieldset>
+    <main>
+        <fieldset>
+            <legend>Business</legend>
+                <div>
+                    <label for="businessName">Name:</label>
+                    <input type="text" th:name="${name_prepend} + 'name'" required>
+                </div>
+                <div>
+                    <label for="businessDescription">Description:</label>
+                    <textarea th:name="${name_prepend} + 'description'"></textarea>
+                </div>
+                <div>
+                    <label for="licence">Licence:</label>
+                    <input type="text" th:name="${name_prepend} + 'licence'" required>
+                </div>
+                <div>
+                    <label for="businessActive">Active:</label>
+                    <input type="checkbox" th:name="${name_prepend} + 'active'">
+                </div>
+        </fieldset>
+    </main>
 </section>
 </body>
 </html>

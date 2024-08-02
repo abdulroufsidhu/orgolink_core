@@ -1,5 +1,6 @@
 package io.github.abdulroufsidhu.ambaar.apis.core.auth.tokenizer
 
+import io.github.abdulroufsidhu.ambaar.apis.core.Responser
 import io.github.abdulroufsidhu.ambaar.apis.user.SecurityUserService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -25,31 +26,41 @@ class JwtAuthFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val authHeader: String? = request.getHeader("Authorization")
+        try {
 
-        logger.info("authHeader: $authHeader")
+            val authHeader: String? = request.getHeader("Authorization")
 
-        if (authHeader.doesNotContainBearerToken()) {
+            logger.info("authHeader: $authHeader")
+
+            if (authHeader.doesNotContainBearerToken()) {
+                filterChain.doFilter(request, response)
+                return
+            }
+            val jwtToken = authHeader!!.extractTokenValue()
+            val email = tokenService.extractEmail(jwtToken)
+
+            if (email == null) {
+                filterChain.doFilter(request, response)
+                return
+            }
+
+            if (SecurityContextHolder.getContext().authentication == null) {
+                val foundUser = userDetailsService.loadUserByUsername(email)
+
+                val isTokenValid = tokenService.isValid(jwtToken, foundUser)
+                logger.info("isTokenValid: $isTokenValid")
+
+                if (isTokenValid) updateContext(foundUser, request)
+            }
             filterChain.doFilter(request, response)
+        } catch (e: Exception) {
+            response.apply {
+                addHeader("Hx-Redirect", "/auth")
+                writer.write("""${Responser.error { e }.body}""")
+                writer.flush()
+            }
             return
         }
-        val jwtToken = authHeader!!.extractTokenValue()
-        val email = tokenService.extractEmail(jwtToken)
-
-        if (email == null) {
-            filterChain.doFilter(request, response)
-            return
-        }
-
-        if (SecurityContextHolder.getContext().authentication == null) {
-            val foundUser = userDetailsService.loadUserByUsername(email)
-
-            val isTokenValid = tokenService.isValid(jwtToken, foundUser)
-            logger.info("isTokenValid: $isTokenValid")
-
-            if (isTokenValid) updateContext(foundUser, request)
-        }
-        filterChain.doFilter(request, response)
     }
 
     private fun String?.doesNotContainBearerToken() =

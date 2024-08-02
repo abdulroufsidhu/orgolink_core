@@ -9,14 +9,14 @@
                 window.sessionStorage.setItem("user", JSON.stringify(JSON.parse(event.detail.xhr.response).data.user));
             }
         </script>
-        <div x-data="{showLogin : true}">
+        <main x-data="{showLogin : true}" class="container">
             <h1>Greetings</h1>
             <h3>Welcome to Ambaar</h3>
             <p>A Generic Point Of Sales System with everyone in mind</p>
 
             <div>
                 <label for="auth-selector">Authenticate Your Self</label>
-                <input type="checkbox" name="auth-selector" @click="showLogin = !showLogin" />
+                <input type="checkbox" name="auth-selector" @click="showLogin = !showLogin" role="switch" />
             </div>
 
             <div id="login-form" x-show="showLogin">
@@ -26,11 +26,11 @@
                     <label for="email">Email</label>
                     <input type="email" name="email" required />
                     <br>
-                    <div x-data="{ show: false }">
-                        <label for="password">Password:</label>
+                    <label for="password">Password:</label>
+                    <fieldset role="group" x-data="{ show: false }">
                         <input :type="show ? 'text' : 'password'" name="password" required>
-                        <span class="toggle-password" @click="show = !show">👁️</span>
-                    </div>
+                        <button type="button" class="toggle-password" @click="show = !show">👁️</button>
+                    </fieldset>
                     <br>
                     <button type="submit">Submit</button>
                 </form>
@@ -44,18 +44,18 @@
                     <label for="email">Email</label>
                     <input type="email" name="email" required />
                     <br>
-                    <div x-data="{ show: false }">
-                        <label for="password">Password:</label>
+                    <label for="password">Password:</label>
+                    <fieldset role="group" x-data="{ show: false }">
                         <input :type="show ? 'text' : 'password'" name="password" required>
-                        <span class="toggle-password" @click="show = !show">👁️</span>
-                    </div>
+                        <button type="button" class="toggle-password" @click="show = !show">👁️</button>
+                    </fieldset>
                     <br>
 
                     <div th:insert="fieldsets/address :: content(name_prepend='address.')"></div>
                     <input type="submit" />
                 </form>
             </div>
-        </div>
+        </main>
     </section>
 </body>
 

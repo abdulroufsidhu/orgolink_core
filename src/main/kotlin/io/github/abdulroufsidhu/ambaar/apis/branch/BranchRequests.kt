@@ -36,7 +36,7 @@ class BranchRequests(
         val businessId = employee.branch.business?.id
             ?: throw IllegalArgumentException("branch not attached to business")
 
-//        PermissionVerifier.verify(employee, Employee.Permissions.BRANCH_READ_ALL)
+        PermissionVerifier.verify(employee, Employee.Permissions.BRANCH_READ_ALL)
 
         branchLogic.get(businessId)
     }
@@ -48,7 +48,7 @@ class BranchRequests(
         @RequestAttribute("employee") employee: Employee,
     ) = Responser.success {
         logger.info("${user.username} wants to create a branch with code: ${branch.code} in business: ${employee.branch.business?.name}")
-//        PermissionVerifier.verify(employee, Employee.Permissions.BRANCH_CREATE)
+        PermissionVerifier.verify(employee, Employee.Permissions.BRANCH_CREATE)
 
         employeeLogic.create(
             Employee(

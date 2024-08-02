@@ -7,15 +7,19 @@
             document.querySelector("#cancel_business_add").click();
         } 
     </script>
-    <dialog :open="showDialog">
-        <h3>Add Business</h3>
-        <form hx-put="/api/business" method="dialog" hx-swap="none" hx-on:htmx:after-request="closeDialog(event)">
-            <div th:insert="~{fieldsets/branch :: content(name_prepend='')}"></div>
-            <div th:insert="~{fieldsets/address :: content(name_prepend='address.')}"></div>
-            <div th:insert="~{fieldsets/business :: content(name_prepend='business.')}"></div>
-            <button type="submit">Submit</button>
-            <button id="cancel_business_add" type="reset" @click="showDialog = false">Cancel</button>
-        </form>
+    <dialog :open="showDialog" style="align-items: flex-start; overflow: auto;">
+        <article>
+            <header> <h2>Add Business</h2> </header>
+            <form hx-put="/api/business" method="dialog" hx-swap="none" hx-on:htmx:after-request="closeDialog(event)">
+                <div th:insert="~{fieldsets/branch :: content(name_prepend='')}"></div>
+                <div th:insert="~{fieldsets/address :: content(name_prepend='address.')}"></div>
+                <div th:insert="~{fieldsets/business :: content(name_prepend='business.')}"></div>
+                <div style="display: flex; flex-wrap: wrap;">
+                    <button type="submit">Submit</button>
+                    <button id="cancel_business_add" type="reset" @click="showDialog = false">Cancel</button>
+                </div>
+            </form>
+        </article>
     </dialog>
     <button @click="showDialog = !showDialog">Add Business</button>
 </section>

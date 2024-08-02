@@ -9,6 +9,7 @@ import java.util.UUID
 interface EmployeeDao: JpaRepository<Employee, UUID> {
 
     @Query("SELECT e FROM Employee e WHERE e.id = :id")
+    @EntityGraph(attributePaths = ["user", "branch", "permissions"])
     fun findByEmployeeId(id: UUID) : Optional<Employee>
     fun findByBranchId(branchId: UUID): Optional<List<Employee>>
 
