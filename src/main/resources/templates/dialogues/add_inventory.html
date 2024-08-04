@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="content" x-data="{showDialog:false}">
+    <script>
+        function closeDialog(evt) {
+            document.querySelector("#cancel_inventory_add").click();
+        }
+    </script>
+    <button @click="showDialog = !showDialog">Add Inventory</button>
+    <dialog :open="showDialog" style="align-items: flex-start; overflow: auto;">
+        <article>
+            <header><h2>Add Inventory</h2> </header>
+            <form hx-put="/api/inventory" method="dialog" hx-swap="none" hx-on:htmx:after-request="closeDialog(event)">
+                <div th:insert="~{fieldsets/inventory :: content(name_prepend='')}"></div>
+                <div style="display: flex; flex-wrap: wrap;">
+                    <button type="submit">Submit</button>
+                    <button id="cancel_inventory_add" type="reset" @click="showDialog = false">Cancel</button>
+                </div>
+            </form>
+        </article>
+    </dialog>
+</section>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="content (name_prepend)" x-data="{showDialog:false}">
+
+    <div th:insert="/fieldsets/products :: content(name_prepend='product.')" ></div>
+    <fieldset>
+        <legend>Inventory</legend>
+        <div>
+            <label for="color">Color:</label>
+            <input type="text" th:name="${name_prepend} + 'color'" required>
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <input type="text" th:name="${name_prepend} + 'description'" required>
+        </div>
+        <div>
+            <label for="quantityInStock">Quantity In Stock:</label>
+            <input type="number" th:name="${name_prepend} + 'quantityInStock'" required>
+        </div>
+        <div>
+            <label for="unitPrice">Unit Price:</label>
+            <input type="number" th:name="${name_prepend} + 'unitPrice'" required>
+        </div>
+        <div>
+            <label for="allowedDiscountInPercent">Allowed Discount:</label>
+            <input type="range" min="0" max="100" th:name="${name_prepend} + 'allowedDiscountInPercent'" required>
+        </div>
+        <div>
+            <label for="purchasePrice">Purchase Price:</label>
+            <input type="number" th:name="${name_prepend} + 'purchasePrice'" required>
+        </div>
+    </fieldset>
+
+</section>
+</html>

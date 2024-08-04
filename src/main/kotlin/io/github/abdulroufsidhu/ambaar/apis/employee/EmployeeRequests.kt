@@ -43,7 +43,6 @@ class EmployeeRequests(
 
     @PatchMapping("")
     fun updateEmployee(
-
         employee: Employee
     ) = Responser.success {
         employeeLogic.update(employee)

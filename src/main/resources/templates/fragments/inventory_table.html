@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <section th:fragment="content">
+
+        <div th:insert="/dialogues/add_inventory"></div>
+
+        <table class="stripped">
+            <thead id="inventory_table_head">
+            </thead>
+            <tbody id="inventory_table_body">
+            </tbody>
+        </table>
+        <script>
+            async function loadInventory(evt) {
+                const response = JSON.parse(evt.detail.xhr.response).data
+                let header = `
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Maker</th>
+                        <th scope="col">Weight</th>
+                        <th scope="col">Dimensions</th>
+                        <th scope="col">Color</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Allowed Discount</th>
+                    </tr>
+                `;
+                document.getElementById("inventory_table_head").innerHTML=header;
+                let rows = '';
+                response.content.map(e=>{
+                    rows += `<tr>
+                        <td>${e.product.name}</td>
+                        <td>${e.product.company}</td>
+                        <td>${e.product.weight}</td>
+                        <td>${e.product.dimentions}</td>
+                        <td>${e.color}</td>
+                        <td>${e.description}</td>
+                        <td>${e.quantityInStock}</td>
+                        <td>${e.unitPrice}</td>
+                        <td>${e.allowedDiscountInPercent}%</td>
+                    </tr>`
+                })
+                document.getElementById("inventory_table_body").innerHTML = rows
+            }
+        </script>
+        <a id="inventory-table-data-loader-api" hx-get="/api/inventory/1" hx-trigger="load delay:1s, click" hx-on:htmx:after-request="loadInventory(event)"
+            hx-swap="none"></a>
+    </section>
+
+</html>

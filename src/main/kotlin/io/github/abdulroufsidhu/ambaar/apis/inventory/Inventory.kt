@@ -1,5 +1,6 @@
 package io.github.abdulroufsidhu.ambaar.apis.inventory
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.github.abdulroufsidhu.ambaar.apis.branch.Branch
 import io.github.abdulroufsidhu.ambaar.apis.core.BaseTable
 import io.github.abdulroufsidhu.ambaar.apis.product.Product
@@ -27,11 +28,12 @@ data class Inventory(
     @Column(name = "purchase_price")
     var purchasePrice: Double? = null,
 
-    @ManyToOne(targetEntity = Branch::class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Branch::class, fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id")
-    var branch: Branch,
+    @JsonIgnore
+    var branch: Branch? = null,
 
-    @ManyToOne(targetEntity = Product::class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Product::class, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     var product: Product? = null,
 

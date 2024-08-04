@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="content">
+    <details class="dropdown">
+        <summary id="employement-data-display">Select Employement</summary>
+        <ul>
+            <li style="width: 100%; display: flex; flex-direction: row-reverse;">
+                <a id="employment-data-loader-api-call" hx-get="/api/employee" hx-swap="none" hx-trigger="click, load delay:500ms"
+                    hx-on:htmx:after-request="setupEmployees(event)"></a>
+            </li>
+            <li>
+                <select id="business-select"></select>
+                <div th:insert="dialogues/add_business.html :: content"></div>
+            </li>
+            <li>
+                <select id="branch-select"></select>
+                <div th:insert="dialogues/add_branch.html :: content"></div>
+            </li>
+        </ul>
+    </details>
+    <script defer>
+        let user = JSON.parse(window.sessionStorage.getItem("user"));
+        async function loadSelectorValues() {
+            let employments = JSON.parse(window.sessionStorage.getItem("employments"))
+            const emp = {};
+            employments.forEach(element => {
+                emp[element.branch.business.id] = element.branch.business.name;
+            });
+            let businessSelector = document.getElementById("business-select") 
+            document.getElementById("business-select").innerHTML=""
+            for (const [index, [key, value]] of Object.entries(emp).entries()) {
+                let option = document.createElement("option");
+                option.text = value;
+                option.value = key;
+                businessSelector.add(option);
+                if (index === 0) {
+                    setBranchesSelector(key);
+                }
+            }
+            document.getElementById("business-select").addEventListener("change", (evt) => {
+                let selectedBusiness = evt.target.value;
+                setBranchesSelector(selectedBusiness);
+            });
+            document.getElementById("branch-select").addEventListener("change", (evt) => {
+                setEmployee(evt.target.value);
+            })
+        }
+
+        function setBranchesSelector(businessId) {
+            let employments = JSON.parse(window.sessionStorage.getItem("employments"))
+            let branchesSelect = document.getElementById("branch-select");
+            branchesSelect.innerHTML = "";
+            employments?.filter(e => e.branch.business.id === businessId).map((e, index) => {
+                let option = document.createElement("option");
+                option.text = e.branch.code;
+                option.value = e.branch.id;
+
+                branchesSelect.add(option);
+                if (index === 0) {
+                    setEmployee(e.branch.id);
+                }
+            })
+        }
+
+        function setEmployee(branchId) {
+            let employments = JSON.parse(window.sessionStorage.getItem("employments"))
+            let employee = employments?.filter((e) => e.branch.id === branchId)[0];
+            window.sessionStorage.setItem("activeEmployeeId", employee.id);
+            document.getElementById("employement-data-display").innerHTML = employee.designation + " at " + employee.branch.code;
+            document.getElementById("inventory-table-data-loader-api").click();
+        }
+
+        function setupEmployees(evt) {
+            window.sessionStorage.setItem("employments", JSON.stringify(JSON.parse(evt.detail.xhr.response).data));
+            loadSelectorValues()
+        }
+
+    </script>
+</section>
+</html>
