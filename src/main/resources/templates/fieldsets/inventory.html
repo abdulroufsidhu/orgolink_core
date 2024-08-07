@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<section th:fragment="content (name_prepend)" x-data="{showDialog:false}">
+<section th:fragment="content (name_prepend, name,company,weight,dimentions, color,description,quantityInStock,unitPrice,allowedDiscountInPercent,purchasePrice)" x-data="{showDialog:false}">
 
-    <div th:insert="/fieldsets/products :: content(name_prepend='product.')" ></div>
+    <div th:insert="/fieldsets/products :: content(name_prepend='product.',name=name,company=company,weight=weight,dimentions=dimentions)" ></div>
     <fieldset>
         <legend>Inventory</legend>
         <div>
-            <label for="color">Color:</label>
-            <input type="text" th:name="${name_prepend} + 'color'" required>
+            <label th:for="${name_prepend} + 'color'">Color:</label>
+            <input type="text" th:name="${name_prepend} + 'color'" th:value="${color}"/> 
         </div>
         <div>
-            <label for="description">Description:</label>
-            <input type="text" th:name="${name_prepend} + 'description'" required>
+            <label th:for="${name_prepend} + 'description'">Description:</label>
+            <input type="text" th:name="${name_prepend} + 'description'" th:value="${description}"/> 
         </div>
         <div>
-            <label for="quantityInStock">Quantity In Stock:</label>
-            <input type="number" th:name="${name_prepend} + 'quantityInStock'" required>
+            <label th:for="${name_prepend} + 'quantityInStock'">Quantity In Stock:</label>
+            <input type="number" th:name="${name_prepend} + 'quantityInStock'" required th:value="${quantityInStock}"/> 
         </div>
         <div>
-            <label for="unitPrice">Unit Price:</label>
-            <input type="number" th:name="${name_prepend} + 'unitPrice'" required>
+            <label th:for="${name_prepend} + 'unitPrice'">Unit Price:</label>
+            <input type="number" th:name="${name_prepend} + 'unitPrice'" required th:value="${unitPrice}"/> 
         </div>
         <div>
-            <label for="allowedDiscountInPercent">Allowed Discount:</label>
-            <input type="range" min="0" max="100" th:name="${name_prepend} + 'allowedDiscountInPercent'" required>
+            <label th:for="${name_prepend} + 'allowedDiscountInPercent'">Allowed Discount:</label>
+            <input style="width:85%" type="range" min="0" value="0" max="100" th:name="${name_prepend} + 'allowedDiscountInPercent'" required oninput=" this.nextElementSibling.value = this.value" th:value="${allowedDiscountInPercent}"/> 
+            <output>0</output>
         </div>
         <div>
-            <label for="purchasePrice">Purchase Price:</label>
-            <input type="number" th:name="${name_prepend} + 'purchasePrice'" required>
+            <label th:for="${name_prepend} + 'purchasePrice'">Purchase Price:</label>
+            <input type="number" th:name="${name_prepend} + 'purchasePrice'" required th:value="${purchasePrice}"/>
         </div>
     </fieldset>
 

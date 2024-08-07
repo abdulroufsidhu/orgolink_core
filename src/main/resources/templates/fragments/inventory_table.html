@@ -6,15 +6,28 @@
 
         <div th:insert="/dialogues/add_inventory"></div>
 
-        <table class="stripped">
-            <thead id="inventory_table_head">
-            </thead>
-            <tbody id="inventory_table_body">
-            </tbody>
-        </table>
+        <div style="width: 100%;overflow-x: auto;">
+            <table class="striped">
+                <thead id="inventory_table_head">
+                </thead>
+                <tbody id="inventory_table_body">
+                </tbody>
+            </table>
+        </div>
+        <div id="inventory_table_paginator"
+            style="display: flex; 
+            flex-direction: row; 
+            flex-wrap: wrap; 
+            align-items: center; 
+            justify-content: center;
+            margin-top: 1em;
+            ">
+
+        </div>
         <script>
             async function loadInventory(evt) {
                 const response = JSON.parse(evt.detail.xhr.response).data
+                console.info("response is:", response);
                 let header = `
                     <tr>
                         <th scope="col">Name</th>
@@ -28,9 +41,12 @@
                         <th scope="col">Allowed Discount</th>
                     </tr>
                 `;
-                document.getElementById("inventory_table_head").innerHTML=header;
+                document.getElementById("inventory_table_head").innerHTML = header;
                 let rows = '';
-                response.content.map(e=>{
+                if (response.content.length == 0) {
+                    rows += `<tr ><td colspan="5"><h3>No Records Found</h3></td></tr>`
+                }
+                response.content.map(e => {
                     rows += `<tr>
                         <td>${e.product.name}</td>
                         <td>${e.product.company}</td>
@@ -43,11 +59,22 @@
                         <td>${e.allowedDiscountInPercent}%</td>
                     </tr>`
                 })
-                document.getElementById("inventory_table_body").innerHTML = rows
+                let pages = `
+                <input style="width: 10em" type="number" min="1" max="${response.page.totalPages}" value="${response.page.number + 1}" onchange="loadPage(this.value, ${response.page.totalPages})" />&nbsp<h1> / ${response.page.totalPages} </h1>
+                `;
+                document.getElementById("inventory_table_body").innerHTML = rows;
+                document.getElementById("inventory_table_paginator").innerHTML = pages;
+            }
+
+            function loadPage(pageNumber, totalPages) {
+                pageNumber = Math.max(1, Math.min(pageNumber, totalPages)); // Ensure the page number is within valid range
+                const link = document.getElementById("inventory-table-data-loader-api");
+                link.setAttribute("hx-get", `/api/inventory/${pageNumber}`);
+                link.click(); // Trigger the htmx request
             }
         </script>
-        <a id="inventory-table-data-loader-api" hx-get="/api/inventory/1" hx-trigger="load delay:1s, click" hx-on:htmx:after-request="loadInventory(event)"
-            hx-swap="none"></a>
+        <a id="inventory-table-data-loader-api" hx-get="/api/inventory/1" hx-trigger="load delay:1s, click"
+            hx-on:htmx:after-request="loadInventory(event)" hx-swap="none"></a>
     </section>
 
 </html>

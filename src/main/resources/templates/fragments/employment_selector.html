@@ -4,7 +4,7 @@
 <section th:fragment="content">
     <details class="dropdown">
         <summary id="employement-data-display">Select Employement</summary>
-        <ul>
+        <ul style="height: calc(95dvh - 56px);">
             <li style="width: 100%; display: flex; flex-direction: row-reverse;">
                 <a id="employment-data-loader-api-call" hx-get="/api/employee" hx-swap="none" hx-trigger="click, load delay:500ms"
                     hx-on:htmx:after-request="setupEmployees(event)"></a>
@@ -68,7 +68,9 @@
             let employee = employments?.filter((e) => e.branch.id === branchId)[0];
             window.sessionStorage.setItem("activeEmployeeId", employee.id);
             document.getElementById("employement-data-display").innerHTML = employee.designation + " at " + employee.branch.code;
-            document.getElementById("inventory-table-data-loader-api").click();
+            try {
+                document.getElementById("inventory-table-data-loader-api").click();
+            } catch (e) {}
         }
 
         function setupEmployees(evt) {

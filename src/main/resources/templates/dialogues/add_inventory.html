@@ -7,12 +7,14 @@
             document.querySelector("#cancel_inventory_add").click();
         }
     </script>
-    <button @click="showDialog = !showDialog">Add Inventory</button>
+    <div style="width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center;">
+        <button @click="showDialog = !showDialog">Add Inventory</button>
+    </div>
     <dialog :open="showDialog" style="align-items: flex-start; overflow: auto;">
         <article>
             <header><h2>Add Inventory</h2> </header>
             <form hx-put="/api/inventory" method="dialog" hx-swap="none" hx-on:htmx:after-request="closeDialog(event)">
-                <div th:insert="~{fieldsets/inventory :: content(name_prepend='')}"></div>
+                <div th:insert="~{fieldsets/inventory :: content(name_prepend='',name='',company='',weight='',dimentions='', color='',description = '',quantityInStock = '',unitPrice = '',allowedDiscountInPercent = '0',purchasePrice = '',)}"></div>
                 <div style="display: flex; flex-wrap: wrap;">
                     <button type="submit">Submit</button>
                     <button id="cancel_inventory_add" type="reset" @click="showDialog = false">Cancel</button>
