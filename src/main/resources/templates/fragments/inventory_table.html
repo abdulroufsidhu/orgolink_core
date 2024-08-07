@@ -14,8 +14,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="inventory_table_paginator"
-            style="display: flex; 
+        <div id="inventory_table_paginator" style="display: flex; 
             flex-direction: row; 
             flex-wrap: wrap; 
             align-items: center; 
@@ -29,7 +28,7 @@
                 const response = JSON.parse(evt.detail.xhr.response).data
                 console.info("response is:", response);
                 let header = `
-                    <tr>
+                    <tr style="position:relative">
                         <th scope="col">Name</th>
                         <th scope="col">Maker</th>
                         <th scope="col">Weight</th>
@@ -39,15 +38,16 @@
                         <th scope="col">Quantity</th>
                         <th scope="col">Unit Price</th>
                         <th scope="col">Allowed Discount</th>
+                        <th scope="col" style="position:sticky;top:0;right:0;" >Actions</th>
                     </tr>
                 `;
                 document.getElementById("inventory_table_head").innerHTML = header;
                 let rows = '';
                 if (response.content.length == 0) {
-                    rows += `<tr ><td colspan="5"><h3>No Records Found</h3></td></tr>`
+                    rows += `<tr ><td colspan="1000"><h3>No Records Found</h3></td></tr>`
                 }
                 response.content.map(e => {
-                    rows += `<tr>
+                    rows += `<tr style="position:relative">
                         <td>${e.product.name}</td>
                         <td>${e.product.company}</td>
                         <td>${e.product.weight}</td>
@@ -57,13 +57,22 @@
                         <td>${e.quantityInStock}</td>
                         <td>${e.unitPrice}</td>
                         <td>${e.allowedDiscountInPercent}%</td>
+                        <td style="position:sticky;top:0;right:0;" > 
+                            <a hx-on:htmx:after-request="loadPage(${response.page.number},${response.page.totalPages})" hx-delete="/api/inventory/${e.id}" hx-trigger="click" style="color:white; background-color:red" type="submit" hx-swap="none" hx-confirm="Are you sure you want to delete this item?" >✘</a>
+                        </td>
                     </tr>`
                 })
                 let pages = `
                 <input style="width: 10em" type="number" min="1" max="${response.page.totalPages}" value="${response.page.number + 1}" onchange="loadPage(this.value, ${response.page.totalPages})" />&nbsp<h1> / ${response.page.totalPages} </h1>
                 `;
-                document.getElementById("inventory_table_body").innerHTML = rows;
-                document.getElementById("inventory_table_paginator").innerHTML = pages;
+                const body = document.getElementById("inventory_table_body")
+                body.innerHTML = rows;
+                if (response.page.totalPages > 1) {
+                    document.getElementById("inventory_table_paginator").innerHTML = pages;
+                } else {
+                    document.getElementById("inventory_table_paginator").innerHTML = "";
+                }
+                htmx.process(body);
             }
 
             function loadPage(pageNumber, totalPages) {

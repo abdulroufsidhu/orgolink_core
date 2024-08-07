@@ -8,8 +8,8 @@
             document.getElementById("employment-data-loader-api-call").click()
         } 
     </script>
-    <dialog :open="showDialog" style="align-items: flex-start; overflow: auto;">
-        <article>
+    <dialog :open="showDialog" style="align-items: flex-start; overflow: auto; ">
+        <article style="height: calc(89dvh - 56px);">
             <header> <h2>Add Business</h2> </header>
             <form hx-put="/api/business" method="dialog" hx-swap="none" hx-on:htmx:after-request="closeDialog(event)">
                 <div th:insert="~{fieldsets/branch :: content(name_prepend='')}"></div>

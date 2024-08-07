@@ -9,7 +9,7 @@
         }
     </script>
     <dialog :open="showDialog" style="align-items: flex-start; overflow: auto;">
-        <article>
+        <article style="height: calc(89dvh - 56px);">
             <header><h2>Add Branch</h2> </header>
             <form hx-put="/api/branches" method="dialog" hx-swap="none" hx-on:htmx:after-request="closeDialog(event)">
                 <div th:insert="~{fieldsets/branch :: content(name_prepend='')}"></div>
