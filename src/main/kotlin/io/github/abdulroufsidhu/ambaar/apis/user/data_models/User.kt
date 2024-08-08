@@ -1,13 +1,8 @@
 package io.github.abdulroufsidhu.ambaar.apis.user.data_models
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.github.abdulroufsidhu.ambaar.apis.address.Address
 import io.github.abdulroufsidhu.ambaar.apis.core.BaseTable
-import io.github.abdulroufsidhu.ambaar.apis.employee.Employee
-import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.annotation.Nullable
 import jakarta.persistence.Column
 import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
@@ -16,11 +11,8 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import jakarta.validation.constraints.Email
-import org.hibernate.annotations.LazyCollection
-import org.hibernate.annotations.LazyCollectionOption
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -49,7 +41,7 @@ data class User(
 
     @ElementCollection(targetClass = UserAuthorities::class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY,)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     var authorities: Set<UserAuthorities> = setOf(UserAuthorities.USER),
 
     override var id: UUID? = null,

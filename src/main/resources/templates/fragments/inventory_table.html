@@ -4,7 +4,7 @@
 <body>
     <section th:fragment="content">
 
-        <div th:insert="/dialogues/add_inventory"></div>
+        <div th:insert="~{dialogues/add_inventory :: content}"></div>
 
         <div style="width: 100%;overflow-x: auto;">
             <table class="striped">

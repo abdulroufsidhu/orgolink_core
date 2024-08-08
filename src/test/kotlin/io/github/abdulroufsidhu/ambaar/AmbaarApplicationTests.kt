@@ -13,9 +13,6 @@ class AmbaarApplicationTests(
     @Autowired private val userDao: UserDao,
     @Autowired private val addresDao: AddressDao,
 ) {
-    @Test
-    fun contextLoads() {
 
-    }
 
 }

@@ -54,6 +54,7 @@ class JwtAuthFilter(
             }
             filterChain.doFilter(request, response)
         } catch (e: Exception) {
+            logger.error("exception: $e")
             response.apply {
                 addHeader("Hx-Redirect", "/auth")
                 writer.write("""${Responser.error { e }.body}""")

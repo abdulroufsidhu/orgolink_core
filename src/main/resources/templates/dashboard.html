@@ -3,8 +3,8 @@
 
 <body>
     <section th:fragment="content">
-        <div th:insert="/fragments/employment_selector :: content" ></div>
-        <div th:insert="/fragments/inventory_table :: content" ></div>
+        <div th:insert="~{fragments/employment_selector :: content}" ></div>
+        <div th:insert="~{fragments/inventory_table :: content}" ></div>
     </section>
 </body>
 

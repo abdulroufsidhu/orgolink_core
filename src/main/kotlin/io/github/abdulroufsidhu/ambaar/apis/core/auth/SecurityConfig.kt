@@ -31,9 +31,8 @@ class SecurityConfig(
                 customizer
                     .requestMatchers(
                         "*/**",
-                        "/api/users/create",
                         "/api/docs/**",
-                        "/api/users/sign-in",
+                        "/api/users/**",
                     ).permitAll()
                     .requestMatchers("/api/**").hasAuthority(User.UserAuthorities.USER.name)
 
