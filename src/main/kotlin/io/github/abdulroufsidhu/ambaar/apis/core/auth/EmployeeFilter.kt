@@ -26,7 +26,7 @@ class EmployeeFilter(
         try {
             request.setAttribute("employee", employeeLogic.get(empId).orElseThrow())
         } catch (e: Exception) {
-            throw e
+            logger.error(e)
         }
         filterChain.doFilter(request, response)
     }

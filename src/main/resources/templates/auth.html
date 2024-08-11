@@ -3,10 +3,12 @@
 
 <body>
     <section th:fragment="content">
-        <script defer >
+        <script defer>
             function login(event) {
                 window.sessionStorage.setItem("token", `Bearer ${JSON.parse(event.detail.xhr.response).data.token}`);
                 window.sessionStorage.setItem("user", JSON.stringify(JSON.parse(event.detail.xhr.response).data.user));
+                window.sessionStorage.removeItem("employments");
+                window.sessionStorage.removeItem("activeEmployeeId");
             }
         </script>
         <main x-data="{showLogin : true}" class="container">
@@ -22,7 +24,7 @@
             <div id="login-form" x-show="showLogin">
                 <h3>Login</h3>
                 <form id="login-form" hx-post="/api/users/sign-in" hx-swap="none"
-                    hx-on:htmx:after-request="login(event)" >
+                    hx-on:htmx:after-request="login(event)">
                     <label for="email">Email</label>
                     <input type="email" name="email" required />
                     <br>

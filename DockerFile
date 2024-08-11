@@ -3,14 +3,6 @@ FROM openjdk:17-jdk-slim
 
 # Set the working directory in the container
 WORKDIR /app
-# Copy the project files to the container
-COPY . .
-
-# Ensure gradlew has executable permissions
-RUN chmod +x gradlew
-
-# Build the application
-RUN ./gradlew clean build
 
 # Copy the project files to the container
 COPY build/libs/ambaar-0.0.1-SNAPSHOT.jar app.jar

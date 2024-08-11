@@ -27,6 +27,7 @@
             async function loadInventory(evt) {
                 const response = JSON.parse(evt.detail.xhr.response).data
                 console.info("response is:", response);
+                if (!!!response) return;
                 let header = `
                     <tr style="position:relative">
                         <th scope="col">Name</th>
@@ -82,8 +83,8 @@
                 link.click(); // Trigger the htmx request
             }
         </script>
-        <a id="inventory-table-data-loader-api" hx-get="/api/inventory/1" hx-trigger="load delay:1s, click"
+        <a id="inventory-table-data-loader-api" hx-get="/api/inventory/1" hx-trigger="click"
             hx-on:htmx:after-request="loadInventory(event)" hx-swap="none"></a>
     </section>
 
-</html>
+</html> the 336-340 lines

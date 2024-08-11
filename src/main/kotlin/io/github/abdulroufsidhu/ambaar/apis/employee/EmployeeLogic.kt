@@ -63,12 +63,12 @@ class EmployeeLogic(
     )
     fun read(branchId: String?, userId: String?): List<Employee> {
         return if (!branchId.isNullOrBlank()) employeeDao.findByBranchId(UUID.fromString(branchId))
-            .orElseThrow()
+            .orElse(listOf())
         else employeeDao.findByUserId(
             UUID.fromString(
                 userId ?: throw IllegalArgumentException("userId must not be null")
             )
-        ).orElseThrow()
+        ).orElse(listOf())
     }
 
     @Transactional
@@ -80,7 +80,7 @@ class EmployeeLogic(
     fun read(userId: UUID?): List<Employee> {
         return employeeDao.findByUserId(
             userId ?: throw IllegalArgumentException("userId must not be null")
-        ).orElseThrow()
+        ).orElse(listOf())
     }
 
     @Throws(EntityNotFoundException::class)

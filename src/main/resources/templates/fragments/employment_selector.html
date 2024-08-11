@@ -2,7 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <section th:fragment="content">
-    <details class="dropdown">
+    <h2 id="no-employment-msg" ></h2>
+    <div id="no-employment-add-btn" th:insert="dialogues/add_business.html :: content"></div>
+    <details id="employement-selector-dropdown" class="dropdown">
         <summary id="employement-data-display">Select Employement</summary>
         <ul style="height: calc(95dvh - 56px);">
             <li style="width: 100%; display: flex; flex-direction: row-reverse;">
@@ -74,8 +76,18 @@
         }
 
         function setupEmployees(evt) {
-            window.sessionStorage.setItem("employments", JSON.stringify(JSON.parse(evt.detail.xhr.response).data));
-            loadSelectorValues()
+            const emp = JSON.stringify(JSON.parse(evt.detail.xhr.response).data);
+            if (emp.length == 0) {
+                document.getElementById("no-employment-msg").innerHTML="No Employment ..."
+                document.getElementById("no-employment-add-btn").removeAttribute("hidden");
+                document.getElementById("employement-selector-dropdown").setAttribute("hidden", "true");
+            } else {
+                document.getElementById("no-employment-msg").innerHTML=""
+                document.getElementById("no-employment-add-btn").setAttribute("hidden", "true");
+                document.getElementById("employement-selector-dropdown").removeAttribute("hidden");
+            }
+            window.sessionStorage.setItem("employments", emp);
+            loadSelectorValues();
         }
 
     </script>

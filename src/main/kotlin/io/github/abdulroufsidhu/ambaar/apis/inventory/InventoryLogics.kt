@@ -30,12 +30,12 @@ class InventoryLogics(
     }
 
     @Throws(IllegalArgumentException::class)
-    fun find(branchId: UUID?, pageNumber: Int): Optional<Page<Inventory>> {
+    fun find(branchId: UUID?, pageNumber: Int): Page<Inventory> {
         if (branchId == null) throw IllegalArgumentException("Branch cannot be null")
         return inventoryDao.findByBranchId(
             branchId,
             Pageable.ofSize(perPage).withPage(pageNumber)
-        )
+        ).orElse(Page.empty())
     }
 
     fun delete(id: String): String {
