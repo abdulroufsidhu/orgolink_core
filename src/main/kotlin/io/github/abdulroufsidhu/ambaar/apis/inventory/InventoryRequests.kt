@@ -2,6 +2,7 @@ package io.github.abdulroufsidhu.ambaar.apis.inventory
 
 import io.github.abdulroufsidhu.ambaar.apis.core.Responser
 import io.github.abdulroufsidhu.ambaar.apis.employee.Employee
+import io.swagger.v3.oas.annotations.parameters.RequestBody
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
@@ -36,7 +37,8 @@ class InventoryRequests(
 
     @PutMapping("")
     fun putInventory(
-        inventory: Inventory, @RequestAttribute("employee") employee: Employee,
+        @RequestBody inventory: Inventory,
+        @RequestAttribute("employee") employee: Employee,
     ) = Responser.success {
         logger.info("Saving inventory $inventory")
         inventoryLogics.save(inventory.copy(branch = employee.branch))
@@ -44,7 +46,7 @@ class InventoryRequests(
 
     @PatchMapping("")
     fun updateInventory(
-        inventory: Inventory
+        @RequestBody inventory: Inventory
     ) = Responser.success {
         inventoryLogics.update(inventory)
     }

@@ -2,6 +2,7 @@ package io.github.abdulroufsidhu.ambaar.apis.employee
 
 import io.github.abdulroufsidhu.ambaar.apis.core.Responser
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.User
+import io.swagger.v3.oas.annotations.parameters.RequestBody
 import jakarta.transaction.Transactional
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -36,14 +37,14 @@ class EmployeeRequests(
 
     @PutMapping("")
     fun createEmployee(
-        employee: Employee
+        @RequestBody employee: Employee
     ) = Responser.success {
         employeeLogic.create(employee)
     }
 
     @PatchMapping("")
     fun updateEmployee(
-        employee: Employee
+        @RequestBody employee: Employee
     ) = Responser.success {
         employeeLogic.update(employee)
     }

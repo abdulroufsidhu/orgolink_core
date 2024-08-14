@@ -1,10 +1,10 @@
 package io.github.abdulroufsidhu.ambaar.apis.branch
 
 import io.github.abdulroufsidhu.ambaar.apis.core.Responser
-import io.github.abdulroufsidhu.ambaar.apis.core.auth.PermissionVerifier
 import io.github.abdulroufsidhu.ambaar.apis.employee.Employee
 import io.github.abdulroufsidhu.ambaar.apis.employee.EmployeeLogic
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.User
+import io.swagger.v3.oas.annotations.parameters.RequestBody
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -44,7 +44,7 @@ class BranchRequests(
     @PutMapping("")
     fun createBranch(
         @AuthenticationPrincipal user: User,
-        branch: Branch,
+        @RequestBody branch: Branch,
         @RequestAttribute("employee") employee: Employee,
     ) = Responser.success {
         logger.info("${user.username} wants to create a branch with code: ${branch.code} in business: ${employee.branch.business?.name}")
@@ -72,7 +72,7 @@ class BranchRequests(
 
     @PatchMapping("")
     fun updateBranch(
-        branch: Branch,
+        @RequestBody branch: Branch,
     ) = Responser.success {
         branchLogic.update(branch)
     }

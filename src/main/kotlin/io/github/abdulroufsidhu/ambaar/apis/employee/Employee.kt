@@ -1,6 +1,5 @@
 package io.github.abdulroufsidhu.ambaar.apis.employee
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import io.github.abdulroufsidhu.ambaar.apis.branch.Branch
 import io.github.abdulroufsidhu.ambaar.apis.core.BaseTable
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.User
@@ -9,7 +8,6 @@ import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table

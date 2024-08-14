@@ -28,7 +28,7 @@ class BranchLogic(
         } else branch.business?.id ?: throw IllegalArgumentException("Business cannot be null")
 
         if (branch.address == null) throw IllegalArgumentException("Address cannot be null")
-        val addr = addressLogic.saveOrFind(branch.address!!)
+        val addr = addressLogic.saveOrFind(listOf(branch.address!!)).first()
         branch.address = addr
         val saved = branchDao.save(branch.copy(business = Business(id = bid)))
         println("branch created with data: $saved")
@@ -63,7 +63,7 @@ class BranchLogic(
     @Transactional
     fun update(branch: Branch): Branch {
         if (branch.address == null) throw IllegalArgumentException("Address cannot be null")
-        val addr = addressLogic.saveOrFind(branch.address!!)
+        val addr = addressLogic.saveOrFind(listOf(branch.address!!)).first()
         branch.address = addr
         return branchDao.save(branch)
     }

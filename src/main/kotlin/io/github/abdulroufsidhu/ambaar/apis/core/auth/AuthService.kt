@@ -2,8 +2,8 @@ package io.github.abdulroufsidhu.ambaar.apis.core.auth
 
 import io.github.abdulroufsidhu.ambaar.apis.core.auth.tokenizer.TokenService
 import io.github.abdulroufsidhu.ambaar.apis.user.SecurityUserService
-import io.github.abdulroufsidhu.ambaar.apis.user.data_models.SignInRequest
-import io.github.abdulroufsidhu.ambaar.apis.user.data_models.SignInResponse
+import io.github.abdulroufsidhu.ambaar.apis.user.data_models.request.SignInRequest
+import io.github.abdulroufsidhu.ambaar.apis.user.data_models.request.SignInResponse
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails

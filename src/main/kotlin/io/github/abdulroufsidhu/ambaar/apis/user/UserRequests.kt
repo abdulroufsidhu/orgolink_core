@@ -2,8 +2,8 @@ package io.github.abdulroufsidhu.ambaar.apis.user
 
 import io.github.abdulroufsidhu.ambaar.apis.core.ResponseObj
 import io.github.abdulroufsidhu.ambaar.apis.core.Responser
-import io.github.abdulroufsidhu.ambaar.apis.user.data_models.SignInRequest
-import io.github.abdulroufsidhu.ambaar.apis.user.data_models.SignInResponse
+import io.github.abdulroufsidhu.ambaar.apis.user.data_models.request.SignInRequest
+import io.github.abdulroufsidhu.ambaar.apis.user.data_models.request.SignInResponse
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.User
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid

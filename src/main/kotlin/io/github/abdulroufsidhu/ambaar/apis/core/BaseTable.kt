@@ -25,20 +25,20 @@ abstract class BaseTable(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, updatable = false)
-
     @Parameter(hidden = true)
     open var id: UUID?,
+
     @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    @JsonProperty("created_at", access = JsonProperty.Access.READ_ONLY)
-
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP(6) WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP(6)")
+    @JsonProperty("created_at", access = JsonProperty.Access.READ_ONLY,)
     @Parameter(hidden = true)
-    open var createdAt: Instant?,
-    @JsonProperty("updated_at", access = JsonProperty.Access.READ_ONLY)
-    @LastModifiedDate
-    @Column(name = "updated_at", nullable = false)
 
+    open var createdAt: Instant?,
+    @JsonProperty("updated_at", access = JsonProperty.Access.READ_ONLY,)
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false, columnDefinition = "TIMESTAMP(6) WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP(6)")
     open var updatedAt: Instant?,
+
     @Parameter(hidden = true)
     @CreatedBy
     @Column(name = "created_by", nullable = true, updatable = false)

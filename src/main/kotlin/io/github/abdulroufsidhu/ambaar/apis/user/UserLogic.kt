@@ -2,9 +2,10 @@ package io.github.abdulroufsidhu.ambaar.apis.user
 
 import io.github.abdulroufsidhu.ambaar.apis.address.AddressLogic
 import io.github.abdulroufsidhu.ambaar.apis.core.auth.AuthService
-import io.github.abdulroufsidhu.ambaar.apis.user.data_models.SignInRequest
-import io.github.abdulroufsidhu.ambaar.apis.user.data_models.SignInResponse
+import io.github.abdulroufsidhu.ambaar.apis.user.data_models.request.SignInRequest
+import io.github.abdulroufsidhu.ambaar.apis.user.data_models.request.SignInResponse
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.User
+import io.github.abdulroufsidhu.ambaar.apis.user.person.PersonDao
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
 import org.springframework.dao.OptimisticLockingFailureException
@@ -16,6 +17,7 @@ import java.util.UUID
 class UserLogic(
     private val addressLogic: AddressLogic,
     private val userDao: UserDao,
+    private val personDao: PersonDao,
     private val encoder: PasswordEncoder,
     private val authService: AuthService,
 ) {
@@ -29,10 +31,11 @@ class UserLogic(
     )
     @Transactional
     fun createUser(user: User): SignInResponse {
-        if (user.address == null) throw IllegalArgumentException("Address cannot be null")
-        val address = addressLogic.saveOrFind(user.address!!)
-        user.address = address
-        val u = userDao.save(user.copy(password = encoder.encode(user.password)))
+        val addr = user.person.address
+        val addresses = addressLogic.saveOrFind(addr)
+        user.person.address = addresses
+        val p = personDao.save(user.person)
+        val u = userDao.save(user.copy(password = encoder.encode(user.password), person = p))
         return authService.authentication(SignInRequest(u.username, user.password))
     }
 

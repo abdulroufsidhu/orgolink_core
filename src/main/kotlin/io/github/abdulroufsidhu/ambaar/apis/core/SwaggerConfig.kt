@@ -2,8 +2,8 @@ package io.github.abdulroufsidhu.ambaar.apis.core
 
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
-import io.swagger.v3.oas.models.SpecVersion
 import io.swagger.v3.oas.models.info.Info
+import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springdoc.core.models.GroupedOpenApi
@@ -22,13 +22,17 @@ class SwaggerConfig {
             .components(
                 Components()
                     .addSecuritySchemes(
-                    "bearerAuth",
-                    SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer")
-                        .bearerFormat("JWT")
-                )
+                        "bearerAuth",
+                        SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer")
+                            .bearerFormat("JWT")
+                    )
+                    .addSecuritySchemes(
+                        "x-emp",
+                        SecurityScheme().type(SecurityScheme.Type.APIKEY).`in`(SecurityScheme.In.HEADER).name("x-emp").description("id of active employement id")
+                    )
             )
             .security(
-                listOf(SecurityRequirement().addList("bearerAuth"))
+                listOf(SecurityRequirement().addList("bearerAuth").addList("x-emp"))
             )
 
 }

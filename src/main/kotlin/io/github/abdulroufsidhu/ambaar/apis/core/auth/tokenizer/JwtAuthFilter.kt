@@ -19,8 +19,6 @@ class JwtAuthFilter(
     private val tokenService: TokenService,
 ) : OncePerRequestFilter() {
 
-    private val logger = LoggerFactory.getLogger(this::class.java)
-
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -56,7 +54,7 @@ class JwtAuthFilter(
         } catch (e: Exception) {
             logger.error("exception: ${request.requestURI} $e")
             response.apply {
-                addHeader("Hx-Redirect", "/auth")
+//                addHeader("Hx-Redirect", "/auth")
                 writer.write("""${Responser.error { e }.body}""")
                 writer.flush()
             }

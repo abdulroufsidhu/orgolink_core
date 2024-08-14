@@ -40,11 +40,7 @@
             <div id="signup-form" x-show="!showLogin">
                 <h3>Sign Up</h3>
                 <form id="signup-form" hx-put="/api/users/create" hx-swap="none">
-                    <label for="fullName">Full Name</label>
-                    <input type="text" name="fullName" />
-                    <br>
-                    <label for="email">Email</label>
-                    <input type="email" name="email" required />
+                    <div th:insert="~{fieldsets/person :: content (name_prepend='person.')}"></div>
                     <br>
                     <label for="password">Password:</label>
                     <fieldset role="group" x-data="{ show: false }">
@@ -52,8 +48,6 @@
                         <button type="button" class="toggle-password" @click="show = !show">👁️</button>
                     </fieldset>
                     <br>
-
-                    <div th:insert="fieldsets/address :: content(name_prepend='address.')"></div>
                     <input type="submit" />
                 </form>
             </div>
