@@ -1,10 +1,11 @@
 package io.github.abdulroufsidhu.ambaar.apis.branch
 
+import io.github.abdulroufsidhu.ambaar.apis.address.Address
 import io.github.abdulroufsidhu.ambaar.apis.address.AddressLogic
-import io.github.abdulroufsidhu.ambaar.apis.business.Business
 import io.github.abdulroufsidhu.ambaar.apis.business.BusinessLogic
 import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
+import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
 import java.util.UUID
 
@@ -13,26 +14,40 @@ class BranchLogic(
     private val branchDao: BranchDao,
     private val businessLogic: BusinessLogic,
     private val addressLogic: AddressLogic,
+    private val jdbcTemplate: JdbcTemplate,
 ) {
 
-    @Throws(
-        IllegalArgumentException::class, NoSuchElementException::class,
-        OptimisticLockingFailureException::class
-    )
-    @Transactional
-    fun create(branch: Branch): Branch {
-        val bid = if (branch.business?.id == null) {
-            businessLogic.create(
-                branch.business ?: throw IllegalArgumentException("Business cannot be null")
-            ).id
-        } else branch.business?.id ?: throw IllegalArgumentException("Business cannot be null")
+    fun insertOrReturnExisting(branch: Branch): String? {
+        assert(branch.business != null)
+        val businessId = businessLogic.insertOrReturnExisting(branch.business!!)
+            ?: throw IllegalStateException("unable to create or retrieve business")
 
-        if (branch.address == null) throw IllegalArgumentException("Address cannot be null")
-        val addr = addressLogic.saveOrFind(listOf(branch.address!!)).first()
-        branch.address = addr
-        val saved = branchDao.save(branch.copy(business = Business(id = bid)))
-        println("branch created with data: $saved")
-        return saved
+        assert(branch.address != null)
+        val addressId = addressLogic.insertOrReturnExisting(branch.address!!)
+        val sql = """
+            INSERT INTO branches (
+                id
+                , code
+                , description
+                , email
+                , name
+                , phone
+                , website
+                , address_id
+                , business_id
+            ) VALUES (
+                '${branch.id ?: UUID.randomUUID()}'
+                , '${branch.code}'
+                , '${branch.description}'
+                , '${branch.email}'
+                , '${branch.name}'
+                , '${branch.phone}'
+                , '${branch.website}'
+                , '${addressId}'
+                , '${businessId}'
+            ) ON CONFLICT DO NOTHING RETURNING id
+        """.trimIndent()
+        return jdbcTemplate.queryForObject(sql, String::class.java)
     }
 
     @Throws(
@@ -63,9 +78,8 @@ class BranchLogic(
     @Transactional
     fun update(branch: Branch): Branch {
         if (branch.address == null) throw IllegalArgumentException("Address cannot be null")
-        val addr = addressLogic.saveOrFind(listOf(branch.address!!)).first()
-        branch.address = addr
-        return branchDao.save(branch)
+        val addressId = addressLogic.insertOrReturnExisting(branch.address!!)
+        return branchDao.save(branch.copy(address = Address(id = UUID.fromString(addressId))))
     }
 
     @Throws(

@@ -17,11 +17,12 @@ data class Business(
     @field:NotBlank
     var name: String? = null,
     var description: String? = null,
-    @Column(name = "license_number", unique = true, nullable = false)
+    @Column(name = "licence_number", unique = true, nullable = false)
     @field:NotNull
     @field:NotBlank
     var licence: String? = null,
 
+    @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE NOT NULL")
     var active: Boolean = true,
 
     override var id: UUID? = null,

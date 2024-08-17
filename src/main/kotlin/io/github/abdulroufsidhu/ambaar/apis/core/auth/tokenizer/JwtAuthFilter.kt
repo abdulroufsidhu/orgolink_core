@@ -54,7 +54,7 @@ class JwtAuthFilter(
         } catch (e: Exception) {
             logger.error("exception: ${request.requestURI} $e")
             response.apply {
-//                addHeader("Hx-Redirect", "/auth")
+                addHeader("Hx-Redirect", "/auth")
                 writer.write("""${Responser.error { e }.body}""")
                 writer.flush()
             }

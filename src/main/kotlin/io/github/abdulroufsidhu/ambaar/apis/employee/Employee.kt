@@ -60,6 +60,10 @@ data class Employee(
         INVENTORY_READ,
         INVENTORY_UPDATE,
         INVENTORY_DELETE,
+        VIEW_SALES,
+        GENERATE_SALES,
+        UPDATE_SALES,
+        DELETE_SALES,
     }
 
     override fun toString(): String {

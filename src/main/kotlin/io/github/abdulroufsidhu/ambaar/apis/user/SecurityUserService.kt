@@ -12,6 +12,7 @@ class SecurityUserService(
     private val userRepository: UserDao
 ) : UserDetailsService {
 
+    @Transactional()
     override fun loadUserByUsername(username: String): User =
         userRepository.findByEmail(username).orElseThrow()
             ?: throw UsernameNotFoundException("Not found!")

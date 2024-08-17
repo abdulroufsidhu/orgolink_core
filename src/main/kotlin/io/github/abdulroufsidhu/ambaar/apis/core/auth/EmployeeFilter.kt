@@ -5,6 +5,7 @@ import jakarta.persistence.EntityNotFoundException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import java.util.NoSuchElementException
@@ -13,6 +14,7 @@ import java.util.NoSuchElementException
 class EmployeeFilter(
     private val employeeLogic: EmployeeLogic
 ) : OncePerRequestFilter() {
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,

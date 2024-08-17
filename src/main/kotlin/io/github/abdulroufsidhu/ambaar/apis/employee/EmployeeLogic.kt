@@ -6,17 +6,21 @@ import io.github.abdulroufsidhu.ambaar.apis.user.UserDao
 import io.github.abdulroufsidhu.ambaar.apis.user.UserLogic
 import jakarta.persistence.EntityNotFoundException
 import jakarta.transaction.Transactional
+import org.hibernate.Hibernate
+import org.slf4j.LoggerFactory
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.stereotype.Service
 import java.util.UUID
+import kotlin.math.log
 
 @Service
 class EmployeeLogic(
     private val employeeDao: EmployeeDao,
     private val branchLogic: BranchLogic,
-    private val userDao: UserDao,
     private val userLogic: UserLogic,
 ) {
+
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     @Transactional
     @Throws(
@@ -24,17 +28,19 @@ class EmployeeLogic(
     )
     fun create(employee: Employee): Employee {
 //        Logger.getLogger(EmployeeLogic::class.java.name).info("Creating Employee: $employee")
-        var foundUser =
-            userDao.findByEmail(employee.user.username)
-                .orElse(null)
-        if (foundUser == null) {
-            foundUser = userLogic.createUser(employee.user).user
-                ?: throw IllegalArgumentException("user cannot be null")
-        }
-        val bid = if (employee.branch.id == null) {
-            branchLogic.create(employee.branch).id
-        } else employee.branch.id
-        return employeeDao.save(employee.copy(user = foundUser, branch = Branch(id = bid)))
+        logger.info("creating employee: $employee")
+        val userId = userLogic.insertOrReturnExisting(employee.user)
+        logger.info("found user: $userId")
+        assert(userId != null)
+        val bid = branchLogic.insertOrReturnExisting(employee.branch)
+            ?: throw IllegalStateException("unable to create or find branch")
+        logger.info("found branch: $bid")
+        return employeeDao.save(
+            employee.copy(
+                user = employee.user.copy(id = UUID.fromString(userId)),
+                branch = Branch(id = UUID.fromString(bid))
+            )
+        )
     }
 
     @Transactional
@@ -84,6 +90,7 @@ class EmployeeLogic(
     }
 
     @Throws(EntityNotFoundException::class)
+    @Transactional()
     fun get(employeeId: String) = employeeDao.findByEmployeeId(UUID.fromString(employeeId))
 
 }

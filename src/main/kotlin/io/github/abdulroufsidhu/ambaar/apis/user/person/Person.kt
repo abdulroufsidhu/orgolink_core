@@ -37,7 +37,7 @@ data class Person(
     @Column(name = "national_id", unique = true)
     @JsonProperty(value = "national_id")
     val nationalId: String?,
-    @ManyToMany(targetEntity = Address::class, fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity = Address::class, fetch = FetchType.EAGER)
     var address: MutableList<Address?> = mutableListOf(),
     override var createdAt: Instant?,
     override var updatedAt: Instant?,

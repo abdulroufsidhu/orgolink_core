@@ -76,7 +76,8 @@
         }
 
         function setupEmployees(evt) {
-            const emp = JSON.stringify(JSON.parse(evt.detail.xhr.response).data);
+            const emp = JSON.parse(evt.detail.xhr.response).data;
+            console.log("employements", emp.length, emp)
             if (emp.length == 0) {
                 document.getElementById("no-employment-msg").innerHTML="No Employment ..."
                 document.getElementById("no-employment-add-btn").removeAttribute("hidden");
@@ -86,7 +87,7 @@
                 document.getElementById("no-employment-add-btn").setAttribute("hidden", "true");
                 document.getElementById("employement-selector-dropdown").removeAttribute("hidden");
             }
-            window.sessionStorage.setItem("employments", emp);
+            window.sessionStorage.setItem("employments", JSON.stringify(emp));
             loadSelectorValues();
         }
 

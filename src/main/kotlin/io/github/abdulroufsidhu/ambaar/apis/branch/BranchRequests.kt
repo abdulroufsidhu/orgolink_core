@@ -35,8 +35,7 @@ class BranchRequests(
     ) = Responser.success {
         val businessId = employee.branch.business?.id
             ?: throw IllegalArgumentException("branch not attached to business")
-
-//        PermissionVerifier.verify(employee, Employee.Permissions.BRANCH_READ_ALL)
+        assert(employee.permissions.contains(Employee.Permissions.BRANCH_READ_ALL))
 
         branchLogic.get(businessId)
     }
@@ -49,7 +48,7 @@ class BranchRequests(
     ) = Responser.success {
         logger.info("${user.username} wants to create a branch with code: ${branch.code} in business: ${employee.branch.business?.name}")
 
-//        PermissionVerifier.verify(employee, Employee.Permissions.BRANCH_CREATE)
+        assert(employee.permissions.contains(Employee.Permissions.BRANCH_CREATE))
 
         employeeLogic.create(
             Employee(
@@ -72,15 +71,19 @@ class BranchRequests(
 
     @PatchMapping("")
     fun updateBranch(
+        @RequestAttribute("employee") employee: Employee,
         @RequestBody branch: Branch,
     ) = Responser.success {
+        assert(employee.permissions.contains(Employee.Permissions.BRANCH_UPDATE))
         branchLogic.update(branch)
     }
 
     @DeleteMapping("/{id}")
     fun deleteBranch(
+        @RequestAttribute("employee") employee: Employee,
         @PathVariable("id") id: String,
     ) = Responser.success {
+        assert(employee.permissions.contains(Employee.Permissions.BRANCH_DELETE))
         branchLogic.delete(id)
     }
 

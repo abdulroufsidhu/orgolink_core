@@ -2,21 +2,33 @@ package io.github.abdulroufsidhu.ambaar.apis.business
 
 import jakarta.transaction.Transactional
 import org.springframework.dao.OptimisticLockingFailureException
+import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.jdbc.core.queryForObject
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
 class BusinessLogic(
     private val businessDao: BusinessDao,
+    private val jdbcTemplate: JdbcTemplate,
 ) {
 
-    @Throws(
-        IllegalArgumentException::class,
-        OptimisticLockingFailureException::class,
-        NoSuchElementException::class
-    )
-    @Transactional
-    fun create(business: Business) = businessDao.save(business)
+    fun insertOrReturnExisting(business: Business): String? {
+        if (business.id != null) return business.id!!.toString()
+        val sql = """INSERT INTO businesses (
+                |id
+                |, description
+                |, licence_number
+                |, name
+            |) VALUES (
+                |'${business.id ?: UUID.randomUUID()}'
+                |, '${business.description}'
+                |, '${business.licence}'
+                |, '${business.name}'
+            |) ON CONFLICT DO NOTHING RETURNING id
+        """.trimMargin()
+        return jdbcTemplate.queryForObject(sql, String::class.java)
+    }
 
     @Throws(
         IllegalArgumentException::class,

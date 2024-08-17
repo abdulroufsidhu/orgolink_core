@@ -33,6 +33,7 @@ data class Branch(
     var website: String? = null,
     var description: String? = null,
 
+    @Column(name = "active", columnDefinition = "boolean default true not null")
     var active: Boolean = true,
 
     @ManyToOne(targetEntity = Address::class, fetch = FetchType.LAZY)
