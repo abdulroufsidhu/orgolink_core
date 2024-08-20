@@ -4,8 +4,7 @@ Ambaar is an open-source Point of Sales (POS) system built using Spring Boot, Po
 
 ## Requirements
 
-- Java 17
-- PostgreSQL (latest LTS version)
+- [Docker](https://docs.docker.com/compose/install/)
 
 ## Setup Instructions
 
@@ -15,45 +14,20 @@ Ambaar is an open-source Point of Sales (POS) system built using Spring Boot, Po
    cd ambar_springboot
    ```
 
-2. **Database Configuration:**
-
-   You have two options for configuring the database:
-
-   - **Option 1:** Create a PostgreSQL user and database with the following credentials:
-     - Username: `abdul`
-     - Password: `abdul`
-     - Database: `abdul`
-
-     You can create the user and database using the following SQL commands:
-
-     ```sql
-     CREATE USER abdul WITH PASSWORD 'abdul';
-     CREATE DATABASE abdul;
-     GRANT ALL PRIVILEGES ON DATABASE abdul TO abdul;
-     ```
-
-   - **Option 2:** Edit the `application.properties` file with your own PostgreSQL credentials and database name. The `application.properties` file is located in `src/main/resources/application.properties`. Update the file with your own settings:
-
-     ```properties
-     spring.datasource.url=jdbc:postgresql://localhost:5432/your_database_name
-     spring.datasource.username=your_username
-     spring.datasource.password=your_password
-     ```
-
-3. **Build and run the project:**
+1. **Build and run the project:**
 
    ```bash
-   ./gradlew build
-   ./gradlew bootRun
+   ./gradlew clean build
+   docker compose up
    ```
 
-4. **Access the application:**
+1**Access the application:**
 
    Open your browser and go to `http://localhost:8080` to access the application.
 
 ## Dependencies
 
-- Java 17
+- Java 21
 - PostgreSQL (latest LTS version)
 
 ## Project Structure

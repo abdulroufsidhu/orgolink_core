@@ -11,7 +11,6 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 @ComponentScan(basePackages = ["io.github.abdulroufsidhu.ambaar"])
 @EnableJpaAuditing
-@EnableAutoConfiguration
 @SpringBootApplication
 @OpenAPIDefinition(
     info = io.swagger.v3.oas.annotations.info.Info(

@@ -2,9 +2,9 @@ plugins {
 	id("org.springframework.boot") version "3.3.0"
 	id("io.spring.dependency-management") version "1.1.5"
 
-	kotlin("plugin.jpa") version "1.9.24"
-	kotlin("jvm") version "1.9.24"
-	kotlin("plugin.spring") version "1.9.24"
+	kotlin("plugin.jpa") version "2.0.10"
+	kotlin("jvm") version "2.0.10"
+	kotlin("plugin.spring") version "2.0.10"
 }
 
 group = "io.github.abdulroufsidhu"
@@ -12,7 +12,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
@@ -35,6 +35,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+	// docker compose support
+	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
 	// swagger generator
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
