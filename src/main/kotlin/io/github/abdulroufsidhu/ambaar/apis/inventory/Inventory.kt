@@ -1,6 +1,7 @@
 package io.github.abdulroufsidhu.ambaar.apis.inventory
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.github.abdulroufsidhu.ambaar.apis.branch.Branch
 import io.github.abdulroufsidhu.ambaar.apis.core.BaseTable
 import io.github.abdulroufsidhu.ambaar.apis.product.Product
@@ -13,6 +14,11 @@ import jakarta.persistence.Table
 import java.time.Instant
 import java.util.UUID
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.CLASS,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "@class"
+)
 @Entity
 @Table(name = "inventory")
 data class Inventory(
@@ -28,12 +34,12 @@ data class Inventory(
     @Column(name = "purchase_price")
     var purchasePrice: Double? = null,
 
-    @ManyToOne(targetEntity = Branch::class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Branch::class, fetch = FetchType.EAGER)
     @JoinColumn(name = "branch_id")
     @JsonIgnore
     var branch: Branch? = null,
 
-    @ManyToOne(targetEntity = Product::class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Product::class, fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     var product: Product? = null,
 

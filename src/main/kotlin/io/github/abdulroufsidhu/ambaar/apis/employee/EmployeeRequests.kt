@@ -4,6 +4,7 @@ import io.github.abdulroufsidhu.ambaar.apis.core.Responser
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.User
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import jakarta.transaction.Transactional
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping

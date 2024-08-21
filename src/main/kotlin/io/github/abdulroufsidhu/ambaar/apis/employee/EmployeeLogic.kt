@@ -2,22 +2,23 @@ package io.github.abdulroufsidhu.ambaar.apis.employee
 
 import io.github.abdulroufsidhu.ambaar.apis.branch.Branch
 import io.github.abdulroufsidhu.ambaar.apis.branch.BranchLogic
-import io.github.abdulroufsidhu.ambaar.apis.user.UserDao
+import io.github.abdulroufsidhu.ambaar.apis.core.caching.HibernateInitializer
 import io.github.abdulroufsidhu.ambaar.apis.user.UserLogic
 import jakarta.persistence.EntityNotFoundException
 import jakarta.transaction.Transactional
 import org.hibernate.Hibernate
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.stereotype.Service
-import java.util.UUID
-import kotlin.math.log
+import java.util.*
 
 @Service
 class EmployeeLogic(
     private val employeeDao: EmployeeDao,
     private val branchLogic: BranchLogic,
     private val userLogic: UserLogic,
+    private val hibernateInitializer: HibernateInitializer,
 ) {
 
     private val logger = LoggerFactory.getLogger(this::class.java)
@@ -61,6 +62,8 @@ class EmployeeLogic(
         return employeeDao.save(emp.copy(active = false))
     }
 
+
+    @Cacheable(value = ["employee"], key = "{#branchId, #userId}")
     @Transactional
     @Throws(
         IllegalArgumentException::class,
@@ -77,6 +80,8 @@ class EmployeeLogic(
         ).orElse(listOf())
     }
 
+
+    @Cacheable(value = ["employee"], key = "#userId")
     @Transactional
     @Throws(
         IllegalArgumentException::class,
@@ -89,8 +94,14 @@ class EmployeeLogic(
         ).orElse(listOf())
     }
 
+
+    @Cacheable(value = ["employee"], key = "#employeeId")
     @Throws(EntityNotFoundException::class)
     @Transactional()
-    fun get(employeeId: String) = employeeDao.findByEmployeeId(UUID.fromString(employeeId))
+    fun get(employeeId: String): Employee? {
+        val emp = employeeDao.findByEmployeeId(UUID.fromString(employeeId)).orElseThrow()
+        hibernateInitializer.initialize(emp)
+        return emp
+    }
 
 }

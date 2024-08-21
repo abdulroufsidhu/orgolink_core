@@ -1,20 +1,20 @@
 package io.github.abdulroufsidhu.ambaar.apis.employee
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.github.abdulroufsidhu.ambaar.apis.branch.Branch
 import io.github.abdulroufsidhu.ambaar.apis.core.BaseTable
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.User
-import jakarta.persistence.Column
-import jakarta.persistence.ElementCollection
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
-import jakarta.persistence.UniqueConstraint
+import jakarta.persistence.*
 import java.time.Instant
 import java.util.UUID
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.CLASS,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "@class"
+)
 @Entity
 @Table(
     name = "employees",
@@ -26,15 +26,15 @@ data class Employee(
 
     var designation: String?,
 
-    @ManyToOne(targetEntity = User::class)
+    @ManyToOne(targetEntity = User::class, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     var user: User,
 
-    @ManyToOne(targetEntity = Branch::class)
+    @ManyToOne(targetEntity = Branch::class, fetch = FetchType.EAGER)
     @JoinColumn(name = "branch_id")
     var branch: Branch,
 
-    @ElementCollection(targetClass = Permissions::class)
+    @ElementCollection(targetClass = Permissions::class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     var permissions: List<Permissions>,
 

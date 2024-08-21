@@ -4,6 +4,9 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import jakarta.transaction.Transactional
+import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import java.util.Date
@@ -15,6 +18,8 @@ class TokenService(
     private val secretKey = Keys.hmacShaKeyFor(
         jwtProperties.key.toByteArray()
     )
+
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     fun generate(
         userDetails: UserDetails,
@@ -29,13 +34,18 @@ class TokenService(
             .and()
             .signWith(secretKey)
             .compact()
-    fun isValid(token: String, userDetails: UserDetails): Boolean {
-        val email = extractEmail(token)
-        return userDetails.username == email && !isExpired(token)
+
+    @Cacheable(value = ["tokenValidity"], key = "#tokenToValidate")
+    fun isValid(tokenToValidate: String, userDetails: UserDetails): Boolean {
+        logger.info("validating token")
+        val email = extractEmail(tokenToValidate)
+        return userDetails.username == email && !isExpired(tokenToValidate)
     }
+
+    @Cacheable(value = ["tokenEmail"], key = "#tokenToExtractEmail")
     @Throws(ExpiredJwtException::class)
-    fun extractEmail(token: String): String? =
-        getAllClaims(token)
+    fun extractEmail(tokenToExtractEmail: String): String? =
+        getAllClaims(tokenToExtractEmail)
             .subject
 
     @Throws(ExpiredJwtException::class)
@@ -44,13 +54,16 @@ class TokenService(
             .expiration
             .before(Date(System.currentTimeMillis()))
 
+    @Transactional
+    @Cacheable(value = ["tokenClaims"], key = "#tokenToExtractClaims")
     @Throws(ExpiredJwtException::class)
-    private fun getAllClaims(token: String): Claims {
+    private fun getAllClaims(tokenToExtractClaims: String): Claims {
+        logger.info("extracting user from token")
         val parser = Jwts.parser()
             .verifyWith(secretKey)
             .build()
         return parser
-            .parseSignedClaims(token)
+            .parseSignedClaims(tokenToExtractClaims)
             .payload
     }
 }

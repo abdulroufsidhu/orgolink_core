@@ -1,5 +1,6 @@
 package io.github.abdulroufsidhu.ambaar.apis.business
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.github.abdulroufsidhu.ambaar.apis.core.BaseTable
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -9,6 +10,11 @@ import jakarta.validation.constraints.NotNull
 import java.time.Instant
 import java.util.UUID
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.CLASS,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "@class"
+)
 @Entity
 @Table(name = "businesses")
 data class Business(

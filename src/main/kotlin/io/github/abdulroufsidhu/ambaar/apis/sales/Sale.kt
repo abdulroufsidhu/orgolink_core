@@ -1,6 +1,7 @@
 package io.github.abdulroufsidhu.ambaar.apis.sales
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.github.abdulroufsidhu.ambaar.apis.core.BaseTable
 import io.github.abdulroufsidhu.ambaar.apis.inventory.Inventory
 import io.github.abdulroufsidhu.ambaar.apis.user.person.Person
@@ -13,10 +14,15 @@ import jakarta.persistence.Table
 import java.time.Instant
 import java.util.UUID
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.CLASS,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "@class"
+)
 @Entity
 @Table(name = "sales")
 data class Sale(
-    @ManyToOne(targetEntity = Person::class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Person::class, fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
     @JsonProperty(value = "sold_to")
     val soldTo: Person,
@@ -26,7 +32,7 @@ data class Sale(
     @Column(name = "unit_purchase_price")
     @JsonProperty(value = "unit_purchase_price")
     val unitPurchasePrice: Double,
-    @ManyToOne
+    @ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "inventory_id")
     val inventory: Inventory,
     @Column(name="quantity")

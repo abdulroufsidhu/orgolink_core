@@ -26,7 +26,7 @@ class EmployeeFilter(
             return
         }
         try {
-            request.setAttribute("employee", employeeLogic.get(empId).orElseThrow())
+            request.setAttribute("employee", employeeLogic.get(empId))
         } catch (e: Exception) {
             logger.error(e)
         }

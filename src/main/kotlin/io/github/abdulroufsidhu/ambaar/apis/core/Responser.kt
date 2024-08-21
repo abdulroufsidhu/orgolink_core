@@ -1,9 +1,15 @@
 package io.github.abdulroufsidhu.ambaar.apis.core
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.CLASS,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "@class"
+)
 data class ResponseObj<A>(
     val code: Int,
     val message: String,

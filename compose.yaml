@@ -1,5 +1,11 @@
 version: '3.8'
 services:
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel debug
   postgres:
     image: postgres:latest
     container_name: ambar_postgres
@@ -18,11 +24,14 @@ services:
       dockerfile: DockerFile
     container_name: ambar_app
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/abdul
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/abdul
       SPRING_DATASOURCE_USERNAME: abdul
       SPRING_DATASOURCE_PASSWORD: abdul
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      REDIS_HOST: cache
+      REDIS_PORT: 6379
     depends_on:
+      - redis
       - postgres
 
 volumes:

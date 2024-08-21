@@ -24,42 +24,39 @@ class JwtAuthFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        try {
+        val authHeader: String? = request.getHeader("Authorization")
 
-            val authHeader: String? = request.getHeader("Authorization")
+        logger.info("authHeader found ${authHeader.isNullOrBlank().not()}")
 
-            logger.info("authHeader: $authHeader")
-
-            if (authHeader.doesNotContainBearerToken()) {
-                filterChain.doFilter(request, response)
-                return
-            }
-            val jwtToken = authHeader!!.extractTokenValue()
-            val email = tokenService.extractEmail(jwtToken)
-
-            if (email == null) {
-                filterChain.doFilter(request, response)
-                return
-            }
-
-            if (SecurityContextHolder.getContext().authentication == null) {
-                val foundUser = userDetailsService.loadUserByUsername(email)
-
-                val isTokenValid = tokenService.isValid(jwtToken, foundUser)
-                logger.info("isTokenValid: $isTokenValid")
-
-                if (isTokenValid) updateContext(foundUser, request)
-            }
+        if (authHeader.doesNotContainBearerToken()) {
             filterChain.doFilter(request, response)
-        } catch (e: Exception) {
-            logger.error("exception: ${request.requestURI} $e")
-            response.apply {
-                addHeader("Hx-Redirect", "/auth")
-                writer.write("""${Responser.error { e }.body}""")
-                writer.flush()
-            }
             return
         }
+        val jwtToken = authHeader!!.extractTokenValue()
+        val email = tokenService.extractEmail(jwtToken)
+        logger.info("email is ${email}")
+
+        if (email == null) {
+            filterChain.doFilter(request, response)
+            return
+        }
+
+        if (SecurityContextHolder.getContext().authentication == null) {
+            val foundUser = userDetailsService.loadUserByUsername(email)
+
+            val isTokenValid = tokenService.isValid(jwtToken, foundUser)
+            logger.info("isTokenValid: $isTokenValid")
+
+            if (isTokenValid) updateContext(foundUser, request)
+        }
+        filterChain.doFilter(request, response)
+
+//        logger.error("exception: ${request.requestURI} $e")
+//        response.apply {
+//            addHeader("Hx-Redirect", "/auth")
+//            writer.write("""${Responser.error { e }.body}""")
+//            writer.flush()
+//        }
     }
 
     private fun String?.doesNotContainBearerToken() =

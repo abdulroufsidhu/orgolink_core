@@ -4,6 +4,7 @@ import io.github.abdulroufsidhu.ambaar.apis.core.auth.tokenizer.TokenService
 import io.github.abdulroufsidhu.ambaar.apis.user.SecurityUserService
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.request.SignInRequest
 import io.github.abdulroufsidhu.ambaar.apis.user.data_models.request.SignInResponse
+import jakarta.transaction.Transactional
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails

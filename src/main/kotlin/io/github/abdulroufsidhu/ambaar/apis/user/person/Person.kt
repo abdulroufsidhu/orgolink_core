@@ -1,27 +1,27 @@
 package io.github.abdulroufsidhu.ambaar.apis.user.person
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.github.abdulroufsidhu.ambaar.apis.address.Address
 import io.github.abdulroufsidhu.ambaar.apis.core.BaseTable
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToMany
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import jakarta.validation.constraints.Email
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.CLASS,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "@class",
+)
 @Entity
 @Table(name = "persons")
 data class Person(
     override var id: UUID? = null,
-    @Column(name ="first_name")
+    @Column(name = "first_name")
     @JsonProperty(value = "first_name")
     val firstName: String,
-    @Column(name ="last_name")
+    @Column(name = "last_name")
     @JsonProperty(value = "last_name")
     val lastName: String,
     @Column(name = "contact_number", unique = true)

@@ -1,21 +1,19 @@
 package io.github.abdulroufsidhu.ambaar.apis.branch
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.github.abdulroufsidhu.ambaar.apis.address.Address
 import io.github.abdulroufsidhu.ambaar.apis.business.Business
 import io.github.abdulroufsidhu.ambaar.apis.core.BaseTable
-import io.github.abdulroufsidhu.ambaar.apis.employee.Employee
-import io.github.abdulroufsidhu.ambaar.apis.inventory.Inventory
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
-import jakarta.persistence.Table
-import jakarta.persistence.UniqueConstraint
+import jakarta.persistence.*
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
+
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.CLASS,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "@class"
+)
 @Entity
 @Table(
     name = "branches",
@@ -36,11 +34,11 @@ data class Branch(
     @Column(name = "active", columnDefinition = "boolean default true not null")
     var active: Boolean = true,
 
-    @ManyToOne(targetEntity = Address::class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Address::class, fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
     var address: Address? = null,
 
-    @ManyToOne(targetEntity = Business::class)
+    @ManyToOne(targetEntity = Business::class, fetch = FetchType.EAGER)
     @JoinColumn(name = "business_id")
     var business: Business? = null,
 
