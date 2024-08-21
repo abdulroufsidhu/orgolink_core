@@ -8,15 +8,7 @@ import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator
 import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import io.github.abdulroufsidhu.ambaar.apis.address.Address
-import io.github.abdulroufsidhu.ambaar.apis.branch.Branch
-import io.github.abdulroufsidhu.ambaar.apis.business.Business
-import io.github.abdulroufsidhu.ambaar.apis.employee.Employee
-import io.github.abdulroufsidhu.ambaar.apis.inventory.Inventory
-import io.github.abdulroufsidhu.ambaar.apis.product.Product
-import io.github.abdulroufsidhu.ambaar.apis.sales.Sale
-import io.github.abdulroufsidhu.ambaar.apis.user.data_models.User
-import io.github.abdulroufsidhu.ambaar.apis.user.person.Person
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer
 import org.springframework.cache.CacheManager
 import org.springframework.cache.annotation.EnableCaching
@@ -36,7 +28,9 @@ import java.time.Duration
 
 @Configuration
 @EnableCaching
-class CacheConfig {
+class CacheConfig(
+    private val httpServletRequest: HttpServletRequest
+) {
 
     @Bean()
     @Primary
@@ -108,5 +102,4 @@ class CacheConfig {
                 )
         }
     }
-
 }
