@@ -43,7 +43,7 @@ Ambaar is an open-source Point of Sales (POS) system built using Spring Boot, Po
 
 - [Java 21](https://www.java.com/en/)
 - [PostgreSQL (latest LTS version)](https://www.postgresql.org/)
-- [Redis](https://redis.io/)
+- [Redis V6.2](https://redis.io/)
 
 ## Project Structure
 
