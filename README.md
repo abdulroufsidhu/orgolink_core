@@ -2,9 +2,19 @@
 
 Ambaar is an open-source Point of Sales (POS) system built using Spring Boot, PostgreSQL, and HTMX.
 
+## Features
+   - Super fast with the use of [Redis](https://redis.io/)
+   - Auth
+   - Multi Business(es)
+   - Multi Branch(es)
+   - Isolated Inventory (per branch)
+   - Isolated Sales (per branch)
+   - Multi Employments
+   - Record Backtracking (Which user generated specific record)
+
 ## Requirements
 
-- [Docker](https://docs.docker.com/compose/install/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
 ## Setup Instructions
 
@@ -21,14 +31,19 @@ Ambaar is an open-source Point of Sales (POS) system built using Spring Boot, Po
    docker compose up
    ```
 
-1**Access the application:**
+1. **Access Swagger Api Documentation:**
 
-   Open your browser and go to `http://localhost:8080` to access the application.
+   Open your browse and [go to](http://localhost:8080/docs/swagger-ui/index.html) `http://localhost:8080/docs/swagger-ui/index.html`
+
+1. **Access the application:**
+
+   Open your browser and [go to](http://localhost:8080) `http://localhost:8080` to access the application.
 
 ## Dependencies
 
-- Java 21
-- PostgreSQL (latest LTS version)
+- [Java 21](https://www.java.com/en/)
+- [PostgreSQL (latest LTS version)](https://www.postgresql.org/)
+- [Redis](https://redis.io/)
 
 ## Project Structure
 
