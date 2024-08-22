@@ -1,5 +1,6 @@
 package io.github.abdulroufsidhu.ambaar.apis.core.auth
 
+import io.github.abdulroufsidhu.ambaar.apis.core.caching.HibernateInitializer
 import io.github.abdulroufsidhu.ambaar.apis.employee.EmployeeLogic
 import jakarta.persistence.EntityNotFoundException
 import jakarta.servlet.FilterChain
@@ -26,7 +27,9 @@ class EmployeeFilter(
             return
         }
         try {
-            request.setAttribute("employee", employeeLogic.get(empId))
+            val emp = employeeLogic.get(empId)
+            HibernateInitializer.initialize(emp!!)
+            request.setAttribute("employee", emp)
         } catch (e: Exception) {
             logger.error(e)
         }

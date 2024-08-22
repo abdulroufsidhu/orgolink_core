@@ -5,8 +5,6 @@ import io.github.abdulroufsidhu.ambaar.apis.branch.BranchLogic
 import io.github.abdulroufsidhu.ambaar.apis.core.caching.HibernateInitializer
 import io.github.abdulroufsidhu.ambaar.apis.user.UserLogic
 import jakarta.persistence.EntityNotFoundException
-import jakarta.transaction.Transactional
-import org.hibernate.Hibernate
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.OptimisticLockingFailureException
@@ -18,12 +16,11 @@ class EmployeeLogic(
     private val employeeDao: EmployeeDao,
     private val branchLogic: BranchLogic,
     private val userLogic: UserLogic,
-    private val hibernateInitializer: HibernateInitializer,
 ) {
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    @Transactional
+
     @Throws(
         IllegalArgumentException::class, OptimisticLockingFailureException::class
     )
@@ -44,7 +41,7 @@ class EmployeeLogic(
         )
     }
 
-    @Transactional
+
     @Throws(
         IllegalArgumentException::class, OptimisticLockingFailureException::class
     )
@@ -53,7 +50,7 @@ class EmployeeLogic(
         return employeeDao.save(employee)
     }
 
-    @Transactional
+
     @Throws(
         IllegalArgumentException::class, OptimisticLockingFailureException::class
     )
@@ -64,7 +61,7 @@ class EmployeeLogic(
 
 
     @Cacheable(value = ["employee"], key = "{#branchId, #userId}")
-    @Transactional
+
     @Throws(
         IllegalArgumentException::class,
         OptimisticLockingFailureException::class,
@@ -82,7 +79,7 @@ class EmployeeLogic(
 
 
     @Cacheable(value = ["employee"], key = "#userId")
-    @Transactional
+
     @Throws(
         IllegalArgumentException::class,
         OptimisticLockingFailureException::class,
@@ -97,10 +94,9 @@ class EmployeeLogic(
 
     @Cacheable(value = ["employee"], key = "#employeeId")
     @Throws(EntityNotFoundException::class)
-    @Transactional()
     fun get(employeeId: String): Employee? {
         val emp = employeeDao.findByEmployeeId(UUID.fromString(employeeId)).orElseThrow()
-        hibernateInitializer.initialize(emp)
+        HibernateInitializer.initialize(emp)
         return emp
     }
 

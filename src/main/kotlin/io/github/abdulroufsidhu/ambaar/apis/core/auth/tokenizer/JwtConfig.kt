@@ -26,8 +26,8 @@ data class JwtProperties(
 @EnableConfigurationProperties(JwtProperties::class)
 class JwtConfig {
     @Bean
-    fun userDetailsService(userRepository: UserDao, hibernateInitializer: HibernateInitializer): UserDetailsService =
-        SecurityUserService(userRepository, hibernateInitializer)
+    fun userDetailsService(userRepository: UserDao): UserDetailsService =
+        SecurityUserService(userRepository)
 
     @Bean
     fun encoder(): PasswordEncoder = BCryptPasswordEncoder()
@@ -35,10 +35,9 @@ class JwtConfig {
     @Bean
     fun authenticationProvider(
         userRepository: UserDao,
-        hibernateInitializer: HibernateInitializer
     ): AuthenticationProvider =
         DaoAuthenticationProvider().also {
-            it.setUserDetailsService(userDetailsService(userRepository, hibernateInitializer))
+            it.setUserDetailsService(userDetailsService(userRepository))
             it.setPasswordEncoder(encoder())
         }
 

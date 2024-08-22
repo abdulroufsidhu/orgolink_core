@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import jakarta.servlet.http.HttpSession
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
@@ -36,7 +37,7 @@ class TokenService(
             .compact()
 
     @Cacheable(value = ["tokenValidity"], key = "#tokenToValidate")
-    fun isValid(tokenToValidate: String, userDetails: UserDetails): Boolean {
+    fun isValid( session: HttpSession, tokenToValidate: String, userDetails: UserDetails): Boolean {
         logger.info("validating token")
         val email = extractEmail(tokenToValidate)
         return userDetails.username == email && !isExpired(tokenToValidate)
@@ -54,7 +55,7 @@ class TokenService(
             .expiration
             .before(Date(System.currentTimeMillis()))
 
-    @Transactional
+
     @Cacheable(value = ["tokenClaims"], key = "#tokenToExtractClaims")
     @Throws(ExpiredJwtException::class)
     private fun getAllClaims(tokenToExtractClaims: String): Claims {

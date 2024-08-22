@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator
 import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import jakarta.servlet.http.HttpServletRequest
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer
 import org.springframework.cache.CacheManager
 import org.springframework.cache.annotation.EnableCaching
@@ -28,9 +27,7 @@ import java.time.Duration
 
 @Configuration
 @EnableCaching
-class CacheConfig(
-    private val httpServletRequest: HttpServletRequest
-) {
+class CacheConfig {
 
     @Bean()
     @Primary
@@ -60,7 +57,6 @@ class CacheConfig(
             .serializeValuesWith(
                 RedisSerializationContext.SerializationPair.fromSerializer(serializer)
             )
-
 
         return RedisCacheManager.builder(redisConnectionFactory)
             .cacheDefaults(cacheConfig)

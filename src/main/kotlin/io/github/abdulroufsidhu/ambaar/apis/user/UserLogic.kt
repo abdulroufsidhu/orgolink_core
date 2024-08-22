@@ -52,7 +52,7 @@ class UserLogic(
         OptimisticLockingFailureException::class,
         NoSuchElementException::class,
     )
-    @Transactional
+
     fun createUser(user: User): SignInResponse {
         val addr = user.person.address
         val addressId = addressLogic.insertOrReturnExisting(addr.first()!!)!!
@@ -76,7 +76,7 @@ class UserLogic(
         IllegalArgumentException::class,
         OptimisticLockingFailureException::class,
     )
-    @Transactional
+
     fun updateUser(user: User): User {
         if (user.id != null)
             throw IllegalArgumentException("User id cannot be null or blank")
@@ -87,7 +87,7 @@ class UserLogic(
         IllegalArgumentException::class,
         OptimisticLockingFailureException::class,
     )
-    @Transactional
+
     fun updatePassword(userId: String, password: String): User {
         val user = userDao.getReferenceById(UUID.fromString(userId))
         return userDao.save(user.copy(password = encoder.encode(password)))

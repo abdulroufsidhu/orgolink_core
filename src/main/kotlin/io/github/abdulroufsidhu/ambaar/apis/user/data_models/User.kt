@@ -1,5 +1,6 @@
 package io.github.abdulroufsidhu.ambaar.apis.user.data_models
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonTypeInfo
@@ -34,6 +35,7 @@ data class User(
     @ElementCollection(targetClass = UserAuthorities::class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnore
     var authorities: Set<UserAuthorities> = setOf(UserAuthorities.USER),
 
     override var id: UUID? = null,
@@ -47,8 +49,7 @@ data class User(
         SUPER_ADMIN,
     }
 
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> =
-        mutableListOf(* authorities.map { SimpleGrantedAuthority(it.name) }.toTypedArray())
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> = authorities.map { SimpleGrantedAuthority(it.name) }.toMutableList()
 
     override fun getPassword(): String = password.orEmpty()
 

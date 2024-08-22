@@ -35,7 +35,7 @@ class BusinessLogic(
         OptimisticLockingFailureException::class,
         NoSuchElementException::class
     )
-    @Transactional
+
     fun update(business: Business): Business {
         if (business.id == null) throw IllegalArgumentException("id not provided")
         return businessDao.save(business)

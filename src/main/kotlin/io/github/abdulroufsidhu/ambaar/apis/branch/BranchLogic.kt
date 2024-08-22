@@ -75,7 +75,7 @@ class BranchLogic(
         IllegalArgumentException::class, NoSuchElementException::class,
         OptimisticLockingFailureException::class
     )
-    @Transactional
+
     fun update(branch: Branch): Branch {
         if (branch.address == null) throw IllegalArgumentException("Address cannot be null")
         val addressId = addressLogic.insertOrReturnExisting(branch.address!!)
