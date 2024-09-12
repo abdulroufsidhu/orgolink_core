@@ -1,1 +1,1 @@
-rootProject.name = "ambaar"
+rootProject.name = "orgolink-core"
