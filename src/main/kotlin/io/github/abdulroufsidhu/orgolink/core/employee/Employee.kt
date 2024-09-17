@@ -1,20 +1,13 @@
 package io.github.abdulroufsidhu.orgolink.core.employee
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.github.abdulroufsidhu.orgolink.core.branch.Branch
 import io.github.abdulroufsidhu.orgolink.core.config.BaseTable
 import io.github.abdulroufsidhu.orgolink.core.user.User
 import jakarta.persistence.*
-import java.time.Instant
-import java.util.UUID
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.CLASS,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "@class"
-)
+
 @Entity
 @Table(
     name = "employees",
@@ -40,7 +33,7 @@ data class Employee(
 
     var active: Boolean = true,
 
-) : BaseTable() {
+    ) : BaseTable() {
     enum class Permissions {
         BRANCH_CREATE,
         BRANCH_READ_ALL,

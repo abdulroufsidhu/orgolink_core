@@ -1,20 +1,13 @@
 package io.github.abdulroufsidhu.orgolink.core.business
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.github.abdulroufsidhu.orgolink.core.config.BaseTable
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
-import java.time.Instant
-import java.util.UUID
 
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.CLASS,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "@class"
-)
+
 @Entity
 @Table(name = "businesses")
 data class Business(
@@ -31,4 +24,4 @@ data class Business(
     @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE NOT NULL")
     var active: Boolean = true,
 
-) : BaseTable()
+    ) : BaseTable()

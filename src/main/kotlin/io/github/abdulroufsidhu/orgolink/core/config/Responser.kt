@@ -1,17 +1,12 @@
 package io.github.abdulroufsidhu.orgolink.core.config
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.scheduling.annotation.Async
 import java.util.concurrent.CompletableFuture
 
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.CLASS,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "@class"
-)
+
 data class ResponseObj<A>(
     val code: Int,
     val message: String,

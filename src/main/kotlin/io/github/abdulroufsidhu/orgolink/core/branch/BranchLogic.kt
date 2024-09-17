@@ -4,49 +4,28 @@ import io.github.abdulroufsidhu.orgolink.core.address.Address
 import io.github.abdulroufsidhu.orgolink.core.address.AddressLogic
 import io.github.abdulroufsidhu.orgolink.core.business.BusinessLogic
 import org.springframework.dao.OptimisticLockingFailureException
-import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.data.domain.Example
+import org.springframework.data.domain.ExampleMatcher
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.util.UUID
+import java.util.*
 
 @Service
 class BranchLogic(
-    private val branchDao: io.github.abdulroufsidhu.orgolink.core.branch.BranchDao,
+    private val branchDao: BranchDao,
     private val businessLogic: BusinessLogic,
     private val addressLogic: AddressLogic,
-    private val jdbcTemplate: JdbcTemplate,
 ) {
 
-    fun insertOrReturnExisting(branch: Branch): String? {
-        assert(branch.business != null)
-        val businessId = businessLogic.insertOrReturnExisting(branch.business!!)
-            ?: throw IllegalStateException("unable to create or retrieve business")
+    fun insertOrReturnExisting(branch: Branch) =
+        search(branch, Pageable.ofSize(1).withPage(0)).content.firstOrNull() ?: save(branch)
 
-        assert(branch.address != null)
-        val addressId = addressLogic.insertOrReturnExisting(branch.address!!)
-        val sql = """
-            INSERT INTO branches (
-                id
-                , code
-                , description
-                , email
-                , name
-                , phone
-                , website
-                , address_id
-                , business_id
-            ) VALUES (
-                '${branch.id ?: UUID.randomUUID()}'
-                , '${branch.code}'
-                , '${branch.description}'
-                , '${branch.email}'
-                , '${branch.name}'
-                , '${branch.phone}'
-                , '${branch.website}'
-                , '${addressId}'
-                , '${businessId}'
-            ) ON CONFLICT DO NOTHING RETURNING id
-        """.trimIndent()
-        return jdbcTemplate.queryForObject(sql, String::class.java)
+    fun search(branch: Branch, pageable: Pageable) =
+        branchDao.findAll(Example.of(branch, ExampleMatcher.matching().withIncludeNullValues()), pageable)
+
+    fun save(branch: Branch): Branch {
+        val b = businessLogic.insertOrReturnExisting(branch.business!!)
+        return branchDao.save(branch.copy(business = b))
     }
 
     @Throws(
@@ -78,7 +57,7 @@ class BranchLogic(
     fun update(branch: Branch): Branch {
         if (branch.address == null) throw IllegalArgumentException("Address cannot be null")
         val addressId = addressLogic.insertOrReturnExisting(branch.address!!)
-        return branchDao.save(branch.copy(address = Address().apply { id = UUID.fromString(addressId) }))
+        return branchDao.save(branch.copy(address = Address().apply { id = addressId }))
     }
 
     @Throws(

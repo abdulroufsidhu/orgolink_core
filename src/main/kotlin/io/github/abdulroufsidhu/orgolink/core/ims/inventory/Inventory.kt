@@ -1,24 +1,12 @@
 package io.github.abdulroufsidhu.orgolink.core.ims.inventory
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.github.abdulroufsidhu.orgolink.core.branch.Branch
 import io.github.abdulroufsidhu.orgolink.core.config.BaseTable
 import io.github.abdulroufsidhu.orgolink.core.ims.product.Product
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
-import java.time.Instant
-import java.util.UUID
+import jakarta.persistence.*
 
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.CLASS,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "@class"
-)
+
 @Entity
 @Table(name = "inventory")
 data class Inventory(
@@ -43,4 +31,4 @@ data class Inventory(
     @JoinColumn(name = "product_id")
     var product: Product? = null,
 
-) : BaseTable()
+    ) : BaseTable()

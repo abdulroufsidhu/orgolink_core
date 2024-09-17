@@ -1,48 +1,38 @@
 package io.github.abdulroufsidhu.orgolink.core.user
 
-import io.github.abdulroufsidhu.orgolink.core.address.Address
-import io.github.abdulroufsidhu.orgolink.core.address.AddressLogic
 import io.github.abdulroufsidhu.orgolink.core.config.auth.AuthService
+import io.github.abdulroufsidhu.orgolink.core.person.PersonLogic
 import io.github.abdulroufsidhu.orgolink.core.user.requests.SignInRequest
 import io.github.abdulroufsidhu.orgolink.core.user.requests.SignInResponse
-import io.github.abdulroufsidhu.orgolink.core.person.PersonDao
-import io.github.abdulroufsidhu.orgolink.core.person.PersonLogic
-import org.hibernate.Hibernate
 import org.slf4j.LoggerFactory
 import org.springframework.dao.OptimisticLockingFailureException
-import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.data.domain.Example
+import org.springframework.data.domain.ExampleMatcher
+import org.springframework.data.domain.Pageable
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.util.UUID
+import java.util.*
 
 @Service
 class UserLogic(
-    private val addressLogic: AddressLogic,
     private val userDao: UserDao,
-    private val personDao: PersonDao,
-    private val encoder: PasswordEncoder,
-    private val authService: AuthService,
     private val personLogic: PersonLogic,
-    private val jdbcTemplate: JdbcTemplate,
+    private val encoder: PasswordEncoder,
+    private val authService: AuthService
 ) {
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    fun insertOrReturnExisting(user: User): String? {
-        if (user.id != null) return user.id?.toString()
+    fun insertOrReturnExisting(user: User): User = personLogic.insertOrRetrieve(user.person).let { p->
+        searchUser(user.copy(person = p), Pageable.ofSize(1).withPage(0)).content.firstOrNull() ?: save(user.copy(person = p))
+    }
 
-        Hibernate.initialize(user.person)
-        val personId = "" //personLogic.insertOrReturnExisting(user.person)
-        val sql = """
-            INSERT INTO users (
-                id
-                , person_id
-            ) VALUES (
-                '${UUID.randomUUID()}'
-                , '${personId}'
-            ) ON CONFLICT DO NOTHING RETURNING id
-        """.trimIndent()
-        return jdbcTemplate.queryForObject(sql, String::class.java)
+    fun searchUser(user: User, pageable: Pageable) =
+        userDao.findAll(Example.of(user, ExampleMatcher.matching().withIgnoreNullValues()), pageable)
+
+    fun save(user: User): User {
+        val p = personLogic.insertOrRetrieve(user.person)
+        return userDao.save(user.copy(person = p))
     }
 
     @Throws(
@@ -50,44 +40,32 @@ class UserLogic(
         OptimisticLockingFailureException::class,
         NoSuchElementException::class,
     )
-
     fun createUser(user: User): SignInResponse {
-        val addr = user.person.address
-        val addressId = addressLogic.insertOrReturnExisting(addr.first()!!)!!
-        user.person.address = mutableListOf(Address().apply{id = UUID.fromString(addressId)})
-        val p = personDao.save(user.person)
-        val u = userDao.save(user.copy(password = encoder.encode(user.password), person = p))
+        val u = insertOrReturnExisting(
+            user.copy(
+                password = encoder.encode(user.password),
+                primaryEmail = user.person.emails.firstOrNull()?.email
+            )
+        )
         return authService.authentication(SignInRequest(u.username, user.password))
     }
 
-    @Throws(
-        IllegalArgumentException::class,
-        NoSuchElementException::class
-    )
+    @Throws( IllegalArgumentException::class, NoSuchElementException::class )
     fun signIn(signInRequest: SignInRequest): SignInResponse {
         val signInResponse = authService.authentication(signInRequest)
         logger.info("signInResponse: $signInResponse")
         return signInResponse
     }
 
-    @Throws(
-        IllegalArgumentException::class,
-        OptimisticLockingFailureException::class,
-    )
-
+    @Throws( IllegalArgumentException::class, OptimisticLockingFailureException::class, )
     fun updateUser(user: User): User {
-        if (user.id != null)
-            throw IllegalArgumentException("User id cannot be null or blank")
+        if (user.id != null) throw IllegalArgumentException("User id cannot be null or blank")
         return userDao.save(user)
     }
 
-    @Throws(
-        IllegalArgumentException::class,
-        OptimisticLockingFailureException::class,
-    )
-
-    fun updatePassword(userId: String, password: String): User {
-        val user = userDao.getReferenceById(UUID.fromString(userId))
+    @Throws( IllegalArgumentException::class,OptimisticLockingFailureException::class, )
+    fun updatePassword(userId: UUID, password: String): User {
+        val user = userDao.getReferenceById(userId)
         return userDao.save(user.copy(password = encoder.encode(password)))
     }
 

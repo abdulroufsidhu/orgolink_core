@@ -13,7 +13,7 @@ import java.util.*
 
 @Service
 class EmployeeLogic(
-    private val employeeDao: io.github.abdulroufsidhu.orgolink.core.employee.EmployeeDao,
+    private val employeeDao: EmployeeDao,
     private val branchLogic: BranchLogic,
     private val userLogic: UserLogic,
 ) {
@@ -25,18 +25,13 @@ class EmployeeLogic(
         IllegalArgumentException::class, OptimisticLockingFailureException::class
     )
     fun create(employee: Employee): Employee {
-//        Logger.getLogger(EmployeeLogic::class.java.name).info("Creating Employee: $employee")
-        logger.info("creating employee: $employee")
         val userId = userLogic.insertOrReturnExisting(employee.user)
-        logger.info("found user: $userId")
-        assert(userId != null)
-        val bid = branchLogic.insertOrReturnExisting(employee.branch)
+        val bid = branchLogic.insertOrReturnExisting(employee.branch).id
             ?: throw IllegalStateException("unable to create or find branch")
-        logger.info("found branch: $bid")
         return employeeDao.save(
             employee.copy(
-                user = employee.user.apply { id = UUID.fromString(userId) },
-                branch = Branch().apply { id = UUID.fromString(bid) }
+                user = employee.user.apply { id = userId.id },
+                branch = Branch().apply { id = bid }
             )
         )
     }
@@ -61,7 +56,6 @@ class EmployeeLogic(
 
 
     @Cacheable(value = ["employee"], key = "{#branchId, #userId}")
-
     @Throws(
         IllegalArgumentException::class,
         OptimisticLockingFailureException::class,
@@ -79,7 +73,6 @@ class EmployeeLogic(
 
 
     @Cacheable(value = ["employee"], key = "#userId")
-
     @Throws(
         IllegalArgumentException::class,
         OptimisticLockingFailureException::class,

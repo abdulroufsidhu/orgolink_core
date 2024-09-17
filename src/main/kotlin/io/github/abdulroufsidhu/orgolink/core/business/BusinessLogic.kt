@@ -1,32 +1,24 @@
 package io.github.abdulroufsidhu.orgolink.core.business
 
 import org.springframework.dao.OptimisticLockingFailureException
+import org.springframework.data.domain.Example
+import org.springframework.data.domain.ExampleMatcher
+import org.springframework.data.domain.Pageable
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
-import java.util.UUID
+import java.util.*
 
 @Service
 class BusinessLogic(
     private val businessDao: BusinessDao,
-    private val jdbcTemplate: JdbcTemplate,
 ) {
 
-    fun insertOrReturnExisting(business: Business): String? {
-        if (business.id != null) return business.id!!.toString()
-        val sql = """INSERT INTO businesses (
-                |id
-                |, description
-                |, licence_number
-                |, name
-            |) VALUES (
-                |'${business.id ?: UUID.randomUUID()}'
-                |, '${business.description}'
-                |, '${business.licence}'
-                |, '${business.name}'
-            |) ON CONFLICT DO NOTHING RETURNING id
-        """.trimMargin()
-        return jdbcTemplate.queryForObject(sql, String::class.java)
-    }
+    fun insertOrReturnExisting(business: Business) =
+        searchBusiness(business, Pageable.ofSize(1).withPage(0)).content.firstOrNull()
+            ?: businessDao.save(business)
+
+    fun searchBusiness(business: Business, pageable: Pageable) =
+        businessDao.findAll(Example.of(business, ExampleMatcher.matching().withIgnoreNullValues()), pageable)
 
     @Throws(
         IllegalArgumentException::class,

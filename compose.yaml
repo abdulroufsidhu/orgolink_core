@@ -8,7 +8,7 @@ services:
     command: redis-server --save 20 1 --loglevel debug
   postgres:
     image: postgres:latest
-    container_name: ambar_postgres
+    container_name: orgolink_postgres
     environment:
       POSTGRES_DB: abdul
       POSTGRES_USER: abdul
@@ -22,7 +22,7 @@ services:
     build:
       context: .
       dockerfile: DockerFile
-    container_name: ambar_app
+    container_name: orgolink_app
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/abdul
       SPRING_DATASOURCE_USERNAME: abdul
