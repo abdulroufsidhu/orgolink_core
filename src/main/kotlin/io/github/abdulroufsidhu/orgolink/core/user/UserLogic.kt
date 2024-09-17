@@ -4,11 +4,13 @@ import io.github.abdulroufsidhu.orgolink.core.config.auth.AuthService
 import io.github.abdulroufsidhu.orgolink.core.person.PersonLogic
 import io.github.abdulroufsidhu.orgolink.core.user.requests.SignInRequest
 import io.github.abdulroufsidhu.orgolink.core.user.requests.SignInResponse
+import io.github.abdulroufsidhu.orgolink.core.user.requests.UpdatePasswordRequest
 import org.slf4j.LoggerFactory
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.data.domain.Example
 import org.springframework.data.domain.ExampleMatcher
 import org.springframework.data.domain.Pageable
+import org.springframework.security.core.AuthenticationException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
@@ -64,9 +66,9 @@ class UserLogic(
     }
 
     @Throws( IllegalArgumentException::class,OptimisticLockingFailureException::class, )
-    fun updatePassword(userId: UUID, password: String): User {
-        val user = userDao.getReferenceById(userId)
-        return userDao.save(user.copy(password = encoder.encode(password)))
+    fun updatePassword(user: User, upr: UpdatePasswordRequest): User {
+        if (encoder.encode(upr.oldPassword) != user.password) throw IllegalArgumentException("old password does not match")
+        return userDao.save(user.copy(password = encoder.encode(upr.newPassword)))
     }
 
 }

@@ -2,7 +2,7 @@ package io.github.abdulroufsidhu.orgolink.core.user
 
 import io.github.abdulroufsidhu.orgolink.core.config.Responser
 import io.github.abdulroufsidhu.orgolink.core.user.requests.SignInRequest
-import jakarta.validation.Valid
+import io.github.abdulroufsidhu.orgolink.core.user.requests.UpdatePasswordRequest
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -30,16 +30,16 @@ class UserRequests(
     @PatchMapping("/update-password")
     fun updatePassword(
         @AuthenticationPrincipal user: User,
-        @RequestBody @Valid password: String
+        @RequestBody upr: UpdatePasswordRequest,
     ) = Responser.success {
-            userLogic.updatePassword(user.id!!, password)
+            userLogic.updatePassword(user, upr)
         }
 
     @PatchMapping("/update-user")
     fun updateUser(
         @AuthenticationPrincipal user: User,
         @RequestBody updates: User,
-    ) {
+    ) = Responser.success {
         userLogic.updateUser(updates.apply { id = user.id }.copy(active = user.active))
     }
 }
