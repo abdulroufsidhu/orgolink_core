@@ -6,7 +6,6 @@ import org.springframework.data.domain.Example
 import org.springframework.data.domain.ExampleMatcher
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class ContactInfoLogic(
@@ -15,13 +14,36 @@ class ContactInfoLogic(
     private val phoneNumberDao: PhoneNumberDao,
 ) {
     fun saveEmail(email: Email) = emailDao.save(email)
-    fun saveEmail(emails: Iterable<Email>) = emailDao.saveAll(emails)
-
     fun saveNationality(nationality: Nationality) = nationalityDao.save(nationality)
-    fun saveNationality(nationalities: Iterable<Nationality>) = nationalityDao.saveAll(nationalities)
-
     fun savePhoneNumber(phoneNumber: PhoneNumber) = phoneNumberDao.save(phoneNumber)
-    fun savePhoneNumber(phoneNumbers: Iterable<PhoneNumber>) = phoneNumberDao.saveAll(phoneNumbers)
+
+    fun saveEmail(emails: Iterable<Email>) = emails.map {
+        try {
+            emailDao.save(it)
+        } catch (_: Exception) {
+            emailDao.findBy(Example.of(it)) { qo->
+                qo.firstValue()
+            }
+        }
+    }.toSet()
+    fun saveNationality(nationalities: Iterable<Nationality>) = nationalities.map {
+        try {
+            nationalityDao.save(it)
+        } catch (_: Exception) {
+            nationalityDao.findBy(Example.of(it)) {qo ->
+                qo.firstValue()
+            }
+        }
+    }.toSet()
+    fun savePhoneNumber(phoneNumbers: Iterable<PhoneNumber>) = phoneNumbers.map {
+        try {
+            phoneNumberDao.save(it)
+        } catch (_: Exception) {
+            phoneNumberDao.findBy(Example.of(it)) {qo ->
+                qo.firstValue()
+            }
+        }
+    }.toSet()
 
 }
 
@@ -34,24 +56,29 @@ class PersonLogic(
     fun insertOrRetrieve(person: Person) =
         search(person, Pageable.ofSize(1).withPage(0)).content.firstOrNull() ?: save(person)
 
-    fun search (person: Person, pageable: Pageable) =
+    fun search(person: Person, pageable: Pageable) =
         personDao.findAll(Example.of(person, ExampleMatcher.matching().withIncludeNullValues()), pageable)
 
 
     fun save(person: Person): Person {
         val addresses = person.address.mapNotNull { addr ->
-            addr?.let { nonNullAddr ->
-                addressLogic.insertOrReturnExisting(nonNullAddr)
-            }
+            addr?.let { addressLogic.insertOrReturnExisting(it) }
         }.map { Address().apply { id = it } }.toSet()
 
         val emails = contactInfoLogic.saveEmail(person.emails).toSet()
         val phones = contactInfoLogic.savePhoneNumber(person.phoneNumbers).toSet()
         val nationalities = contactInfoLogic.saveNationality(person.nationalities).toSet()
 
-        return personDao.save(person.copy(address = addresses, emails = emails, phoneNumbers = phones, nationalities = nationalities))
+        return personDao.save(
+            person.copy(
+                address = addresses,
+                emails = emails,
+                phoneNumbers = phones,
+                nationalities = nationalities
+            )
+        )
     }
-    fun update(person: Person) {
 
-    }
+    fun update(person: Person) = save(person)
+
 }
